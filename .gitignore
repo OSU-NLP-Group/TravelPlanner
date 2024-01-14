@@ -1,0 +1,7 @@
+
+*.pyc
+*.ipynb
+utils/.DS_Store
+database/.DS_Store
+annotation/.DS_Store
+database/flights/clean_Flights_2022.csv
