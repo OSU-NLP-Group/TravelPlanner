@@ -1,0 +1,55 @@
+{
+    "org": "St. Petersburg",
+    "dest": "Rockford",
+    "days": 3,
+    "visiting city number": 1,
+    "date": [
+        "2022-03-16",
+        "2022-03-17",
+        "2022-03-18"
+    ],
+    "people number": 1,
+    "house rule": null,
+    "cuisine": null,
+    "room type": null,
+    "transportation": null,
+    "budget": 1700,
+    "query": "Please help me plan a trip from St. Petersburg to Rockford spanning 3 days from March 16th to March 18th, 2022. The travel should be planned for a single person with a budget of $1,700.",
+    "level": "easy",
+    "annotated plan":[
+            {
+                "days": 1,
+                "current_city": "from St. Petersburg to Rockford",
+                "transportation": "Flight Number: F3573659, from St. Petersburg to Rockford, Departure Time: 15:40, Arrival Time: 17:04",
+                "breakfast": "-",
+                "attraction": "-",
+                "lunch": "-",
+                "dinner": "Coco Bambu, Rockford",
+                "accommodation": "Pure luxury one bdrm + sofa bed on Central Park, Rockford"
+            },
+            {
+                "days": 2,
+                "current_city": "Rockford",
+                "transportation": "-",
+                "breakfast": "Dial A Cake, Rockford",
+                "attraction": "Burpee Museum of Natural History, Rockford;Midway Village Museum, Rockford;Discovery Center Museum, Rockford;",
+                "lunch": "Flying Mango, Rockford",
+                "dinner": "Cafe Southall, Rockford",
+                "accommodation": "Pure luxury one bdrm + sofa bed on Central Park, Rockford"
+            },
+            {
+                "days": 3,
+                "current_city": "from Rockford to St. Petersburg",
+                "transportation": "Flight Number: F3573120, from Rockford to St. Petersburg, Departure Time: 19:00, Arrival Time: 22:43",
+                "breakfast": "Subway, Rockford",
+                "attraction": "Klehm Arboretum & Botanic Garden, Rockford;Sinnissippi Park, Rockford;",
+                "lunch": "Gajalee Sea Food, Rockford",
+                "dinner": "Nutri Punch, Rockford",
+                "accommodation": "-"
+            },
+            {},
+            {},
+            {},
+            {}
+        ]
+}

@@ -1,0 +1,60 @@
+{
+    "org": "Houston",
+    "dest": "Fayetteville",
+    "days": 3,
+    "visiting_city_number": 1,
+    "date": [
+        "2022-03-20",
+        "2022-03-21",
+        "2022-03-22"
+    ],
+    "people_number": 2,
+    "house rule": "children under 10",
+    "cuisine": [
+        "American",
+        "Mediterranean",
+        "French",
+        "Chinese"
+    ],
+    "room type": null,
+    "transportation": "no self-driving",
+    "budget": 1500,
+    "query": "Could you devise a 3-day travel plan for 2 people departing Houston and heading to Fayetteville from March 20th to March 22nd, 2022, with a budget of $1,500? It is vital that our accommodations allow children under the age of 10 as we will be traveling with kids. We prefer non-self-driving transportation and expect to experience a blend of American, Mediterranean, French, and Chinese cuisines during our stay.",
+    "level": "hard",
+    "annotated plan": [
+        {
+            "days": 1,
+            "current_city": "from Houston to Fayetteville",
+            "transportation": "Flight Number: F3923211, from Houston to Fayetteville, Departure Time: 14:30, Arrival Time: 16:17",
+            "breakfast": "-",
+            "attraction": "Fascinate-U Children's Museum, Fayetteville;",
+            "lunch": "-",
+            "dinner": "Chatorey Chacha, Fayetteville",
+            "accommodation": "Modern 4story building w/private bathroom elavator, Fayetteville"
+        },
+        {
+            "days": 2,
+            "current_city": "Fayetteville",
+            "transportation": "-",
+            "breakfast": "The Great Kabab Factory, Fayetteville",
+            "attraction": "1897 Poe House, Fayetteville;Fayetteville Rose Garden, Fayetteville;",
+            "lunch": "Smoke N Oven, Fayetteville",
+            "dinner": "Noshi - Yum Asian Delivery, Fayetteville",
+            "accommodation": "Modern 4story building w/private bathroom elavator, Fayetteville"
+        },
+        {
+            "days": 3,
+            "current_city": "from Fayetteville to Houston",
+            "transportation": "Flight Number: F3922249, from Fayetteville to Houston, Departure Time: 19:18, Arrival Time: 20:52",
+            "breakfast": "Andaaz E Paranthas, Fayetteville",
+            "attraction": "ZipQuest - Waterfall & Treetop Adventure, Fayetteville;",
+            "lunch": "The Saffron Plant Restaurant, Fayetteville",
+            "dinner": "Subway, Fayetteville",
+            "accommodation": "-"
+        },
+        {},
+        {},
+        {},
+        {}
+    ]
+}

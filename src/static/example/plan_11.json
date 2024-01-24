@@ -1,0 +1,95 @@
+{
+    "org": "Houston",
+    "dest": "Utah",
+    "days": 7,
+    "visiting city number": 3,
+    "date": [
+        "2022-03-23",
+        "2022-03-24",
+        "2022-03-25",
+        "2022-03-26",
+        "2022-03-27",
+        "2022-03-28",
+        "2022-03-29"
+    ],
+    "people number": 1,
+    "house rule": null,
+    "cuisine": null,
+    "room type": null,
+    "transportation": null,
+    "budget": 7700,
+    "query": "Could you assist in creating a travel plan for one person, starting from Houston and heading to Utah for a week? The visit will be from the 23rd of March to the 29th of March, 2022, and will cover 3 different cities in Utah. The budget for this trip is set at $7,700.",
+    "level": "easy",
+    "annotated plan": [
+            {
+                "days": 1,
+                "current_city": "from Houston to Salt Lake City(Utah)",
+                "transportation": "Self-driving, from Houston to Salt Lake City(Utah), duration: 22 hours 21 mins, distance: 2,377 km, cost: 2377",
+                "breakfast": "-",
+                "attraction": "-",
+                "lunch": "-",
+                "dinner": "Tikka Tonight, Salt Lake City(Utah)",
+                "accommodation": "Hamilton Beach House, Salt Lake City(Utah)"
+            },
+            {
+                "days": 2,
+                "current_city": "Salt Lake City(Utah)",
+                "transportation": "-",
+                "breakfast": "Al-Sameer, Salt Lake City(Utah)",
+                "attraction": "City Creek Park, Salt Lake City(Utah);Pioneer Memorial Museum, Salt Lake City(Utah);",
+                "lunch": "Mr. Sub, Salt Lake City(Utah)",
+                "dinner": "Kwality Wall's Swirl's, Salt Lake City(Utah)",
+                "accommodation": "Hamilton Beach House, Salt Lake City(Utah)"
+            },
+            {
+                "days": 3,
+                "current_city": "from Salt Lake City(Utah) to Moab(Utah)",
+                "transportation": "Self-driving, from Salt Lake City(Utah) to Moab(Utah), duration: 3 hours 42 mins, distance: 376 km, cost: 18",
+                "breakfast": "Angeethi, Salt Lake City(Utah)",
+                "attraction": "Hogle Zoo, Salt Lake City(Utah);",
+                "lunch": "Spice Kraft, Moab(Utah)",
+                "dinner": "Shree Rathnam, Salt Lake City(Utah)",
+                "accommodation": "Private bedroom on Upper East Side !!!, Moab(Utah)"
+            },
+            {
+                "days": 4,
+                "current_city": "Moab(Utah)",
+                "transportation": "-",
+                "breakfast": "Masala Factory, Moab(Utah)",
+                "attraction": "Lion's Back, Moab(Utah);Corona Arch, Moab(Utah);",
+                "lunch": "Giani, Moab(Utah)",
+                "dinner": "Bikaner Sweets, Moab(Utah)",
+                "accommodation": "Private bedroom on Upper East Side !!!, Moab(Utah)"
+            },
+            {
+                "days": 5,
+                "current_city": "from Moab(Utah) to Vernal(Utah)",
+                "transportation": "Self-driving, from Moab(Utah) to Vernal(Utah), duration: 3 hours 40 mins, distance: 349 km, cost: 17",
+                "breakfast": "McDonald's, Moab(Utah)",
+                "attraction": "First Lady Dolls, Vernal(Utah);Red Fleet State Park, Vernal(Utah);",
+                "lunch": "Pepper Sprout Incorporated, Vernal(Utah)",
+                "dinner": "MD's Kebabs & Curries, Vernal(Utah)",
+                "accommodation": "Luxurious & Spacious 1 Bedroom Apt, Vernal(Utah)"
+            },
+            {
+                "days": 6,
+                "current_city": "Vernal(Utah)",
+                "transportation": "-",
+                "breakfast": "Foodies Park, Vernal(Utah)",
+                "attraction": "Ashley Valley Community Park, Vernal(Utah);Dinosaur Land In Vernal Utah, Vernal(Utah);",
+                "lunch": "OMG Tiffinz, Vernal(Utah)",
+                "dinner": "Crossroad Bar and Restaurant, Vernal(Utah)",
+                "accommodation": "Clean sm room, with shared space.  Great location., Vernal(Utah)"
+            },
+            {
+                "days": 7,
+                "current_city": "from Vernal(Utah) to Houston",
+                "transportation": "Self-driving, from Vernal(Utah) to Houston, duration: 20 hours 30 mins, distance: 2,167 km, cost: 108",
+                "breakfast": "Ingredients, Vernal(Utah)",
+                "attraction": "Vernal DUP Museum, Vernal(Utah);Cobble Rock Park, Vernal(Utah);",
+                "lunch": "Great Plates By AJ, Vernal(Utah)",
+                "dinner": "McDonald's, Vernal(Utah)",
+                "accommodation": "-"
+            }
+        ]
+}
