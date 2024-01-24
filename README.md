@@ -1,3 +1,3 @@
-# TravelBench
+# TravelPlanner
 
 Code will come soon!
