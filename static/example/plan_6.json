@@ -1,0 +1,75 @@
+{
+    "org": "Orlando",
+    "dest": "Texas",
+    "days": 5,
+    "visiting city number": 2,
+    "date": [
+        "2022-03-10",
+        "2022-03-11",
+        "2022-03-12",
+        "2022-03-13",
+        "2022-03-14"
+    ],
+    "people number": 1,
+    "house rule": null,
+    "cuisine": null,
+    "room type": null,
+    "transportation": null,
+    "budget": 3100,
+    "query": "Could you assist in crafting a travel itinerary for a 5-day, single-person trip departing from Orlando and touring 2 cities in Texas? The travel dates should range from March 10th to March 14th, 2022, and the entire travel budget is $3,100.",
+    "level": "easy",
+    "annotated plan": [
+            {
+                "days": 1,
+                "current_city": "from Orlando to San Antonio(Texas)",
+                "transportation": "Flight Number: F4023176, from Orlando to San Antonio(Texas), Departure Time: 06:58, Arrival Time: 09:22",
+                "breakfast": "-",
+                "attraction": "San Antonio Zoo, San Antonio(Texas);Morgan's Wonderland, San Antonio(Texas);",
+                "lunch": "Burger Queen Drive In, San Antonio(Texas)",
+                "dinner": "Martin's BBQ, San Antonio(Texas)",
+                "accommodation": "Charming Bedroom in Gramercy, San Antonio(Texas)"
+            },
+            {
+                "days": 2,
+                "current_city": "San Antonio(Texas)",
+                "transportation": "-",
+                "breakfast": "Cafe Le Rue @ The Landings, San Antonio(Texas)",
+                "attraction": "San Antonio River Walk, San Antonio(Texas);SeaWorld San Antonio, San Antonio(Texas);San Antonio Missions National Historical Park, San Antonio(Texas);",
+                "lunch": "Barbeque Nation, San Antonio(Texas)",
+                "dinner": "Pita Pit, San Antonio(Texas)",
+                "accommodation": "Charming Bedroom in Gramercy, San Antonio(Texas)"
+            },
+            {
+                "days": 3,
+                "current_city": "from San Antonio(Texas) to Houston(Texas)",
+                "transportation": "Flight Number: F4043146, from San Antonio(Texas) to Houston(Texas), Departure Time: 09:33, Arrival Time: 10:41",
+                "breakfast": "Super Cake Shop, San Antonio(Texas)",
+                "attraction": "Beer Can House, Houston(Texas);Houston Legendary Graffiti Building, Houston(Texas);",
+                "lunch": "Chawla's\u5b8a, Houston(Texas)",
+                "dinner": "Cyber Adda 24, Houston(Texas)",
+                "accommodation": "Sunny and Airy near Manhattan, Houston(Texas)"
+            },
+            {
+                "days": 4,
+                "current_city": "Houston(Texas)",
+                "transportation": "-",
+                "breakfast": "Super Bakery, Houston(Texas)",
+                "attraction": "Water Wall, Houston(Texas);Houston Museum of Natural Science, Houston(Texas);Houston Zoo, Houston(Texas);",
+                "lunch": "Sheetla Dhaba, Houston(Texas)",
+                "dinner": "Giani, Houston(Texas)",
+                "accommodation": "Sunny and Airy near Manhattan, Houston(Texas)"
+            },
+            {
+                "days": 5,
+                "current_city": "from Houston(Texas) to Orlando",
+                "transportation": "Flight Number: F3611734, from Houston(Texas) to Orlando, Departure Time: 15:57, Arrival Time: 19:04",
+                "breakfast": "Al Arabian Express, Houston(Texas)",
+                "attraction": "Downtown Aquarium, Houston(Texas);",
+                "lunch": "The BrewMaster - The Mix Fine Dine, Houston(Texas)",
+                "dinner": "-",
+                "accommodation": "-"
+            },
+            {},
+            {}
+        ]
+}

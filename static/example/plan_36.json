@@ -1,0 +1,75 @@
+{
+    "org": "Atlanta",
+    "dest": "Minnesota",
+    "days": 5,
+    "visiting city number": 2,
+    "date": [
+        "2022-03-03",
+        "2022-03-04",
+        "2022-03-05",
+        "2022-03-06",
+        "2022-03-07"
+    ],
+    "people number": 3,
+    "house rule": "parties",
+    "cuisine": null,
+    "room type": "entire room",
+    "transportation": "no self-driving",
+    "budget": 7900,
+    "query": "Can you create a 5-day travel itinerary for a group of 3, departing from Atlanta and visiting 2 cities in Minnesota from March 3rd to March 7th, 2022? We have a budget of $7,900. We require accommodations that allow parties and should ideally be entire rooms. Although we don't plan to self-drive, we would like the flexibility to host parties.",
+    "level": "hard",
+    "annotated plan": [
+        {
+            "days": 1,
+            "current_city": "from Atlanta to Bemidji(Minnesota)",
+            "transportation": "Taxi, from Atlanta to Bemidji(Minnesota), duration: 19 hours 51 mins, distance: 2,166 km, cost: 2166",
+            "breakfast": "-",
+            "attraction": "-",
+            "lunch": "-",
+            "dinner": "Pig and Whistle, Bemidji(Minnesota)",
+            "accommodation": "A beautiful Cozy 1 BR Apartment., Bemidji(Minnesota)"
+        },
+        {
+            "days": 2,
+            "current_city": "Bemidji(Minnesota)",
+            "transportation": "-",
+            "breakfast": "The Chocolate Haven, Bemidji(Minnesota)",
+            "attraction": "Chief Bemidji Statue, Bemidji(Minnesota);Shaynowishkung Statue, Bemidji(Minnesota);",
+            "lunch": "Bhaja Govindam, Bemidji(Minnesota)",
+            "dinner": "Cafe Coffee Day, Bemidji(Minnesota)",
+            "accommodation": "A beautiful Cozy 1 BR Apartment., Bemidji(Minnesota)"
+        },
+        {
+            "days": 3,
+            "current_city": "from Bemidji(Minnesota) to Minneapolis(Minnesota)",
+            "transportation": "Taxi, from Bemidji(Minnesota) to Minneapolis(Minnesota), duration: 3 hours 34 mins, distance: 347 km, cost: 347",
+            "breakfast": "Right for Night, Bemidji(Minnesota)",
+            "attraction": "Minneapolis Institute of Art, Minneapolis(Minnesota);",
+            "lunch": "Jeet Pizza, Minneapolis(Minnesota)",
+            "dinner": "Puri Bakers, Minneapolis(Minnesota)",
+            "accommodation": "Light-filled Apartment in great area, close 2 all!, Minneapolis(Minnesota)"
+        },
+        {
+            "days": 4,
+            "current_city": "Minneapolis(Minnesota)",
+            "transportation": "-",
+            "breakfast": "Texas Roadhouse, Minneapolis(Minnesota)",
+            "attraction": "Minnehaha Falls, Minneapolis(Minnesota);Prospect Park Water Tower, Minneapolis(Minnesota);",
+            "lunch": "Monkeypod Kitchen by Merriman, Minneapolis(Minnesota)",
+            "dinner": "Balbeer's Kitchen & Bar, Minneapolis(Minnesota)",
+            "accommodation": "Light-filled Apartment in great area, close 2 all!, Minneapolis(Minnesota)"
+        },
+        {
+            "days": 5,
+            "current_city": "from Minneapolis(Minnesota) to Atlanta",
+            "transportation": "Taxi, from Minneapolis(Minnesota) to Atlanta, duration: 16 hours 18 mins, distance: 1,814 km, cost: 1814",
+            "breakfast": "The Cafe, Minneapolis(Minnesota)",
+            "attraction": "-",
+            "lunch": "-",
+            "dinner": "-",
+            "accommodation": "-"
+        },
+        {},
+        {}
+    ]
+}

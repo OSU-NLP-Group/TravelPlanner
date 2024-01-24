@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Toward Real-world Planning for Language Agents">
+  <meta name="keywords" content="TravelPlanner, Travel Bench">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> TravelPlanner: Toward Real-world Planning for Language Agents</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
+  <!-- <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+/Users/panlu/Library/Mobile Documents/com~apple~CloudDocs/ImageMath/visual-mathqa-server/data_final/images
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link rel="icon" href="static/images/icon.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/leaderboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator_bulma.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script> -->
+  <script type="text/javascript" src="static/js/sort-table.js" defer></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/explorer-index.js"></script>
+  <script src="./static/js/question_card.js"></script>
+
+  <script src="./static/js/leaderboard_testmini.js"></script>
+  <script src="./data/results/output_folders.js" defer></script>
+  <script src="./data/results/model_scores.js" defer></script>
+
+  <script src="./visualizer/data/data_public.js" defer></script>
+  <style>
+    pre {
+        max-height: 400px; 
+        overflow-x: auto; 
+        overflow-y: auto;
+        background-color: #f0f0f0; 
+        padding: 10px;
+        border: 1px solid #ccc; 
+        text-align: left;
+    }
+</style>
+<script>
+  function loadJSON(file, elementId) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              document.getElementById(elementId).textContent = xhr.responseText;
+              hljs.highlightElement(document.getElementById(elementId));
+          }
+      };
+      xhr.open('GET', file, true);
+      xhr.send();
+  }
+
+  loadJSON('./static/example/plan_1.json', 'json1');
+  loadJSON('./static/example/plan_6.json', 'json2');
+  loadJSON('./static/example/plan_11.json', 'json3');
+  loadJSON('./static/example/plan_16.json', 'json4');
+  loadJSON('./static/example/plan_21.json', 'json5');
+  loadJSON('./static/example/plan_26.json', 'json6');
+  loadJSON('./static/example/plan_31.json', 'json7');
+  loadJSON('./static/example/plan_36.json', 'json8');
+  loadJSON('./static/example/plan_41.json', 'json9');
+</script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <!-- <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a> -->
+        <!-- @PAN TODO: consider adding links? -->
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://mmmu-benchmark.github.io/">
+              <b>MMMU</b>
+              <p style="font-size:18px; display: inline; margin-left: 5px;"></p>
+            </a>
+            <a class="navbar-item" href="https://osu-nlp-group.github.io/TableLlama/">
+              <b>TableLlama</b>
+              <p style="font-size:18px; display: inline; margin-left: 5px;"></p>
+            </a>
+            <a class="navbar-item" href="https://osu-nlp-group.github.io/Mind2Web/">
+              <b>Mind2Web</b>
+              <p style="font-size:18px; display: inline; margin-left: 5px;"></p>
+            </a>
+            <a class="navbar-item" href="https://osu-nlp-group.github.io/MagicBrush/">
+              <b>MagicBrush</b>
+              <p style="font-size:18px; display: inline; margin-left: 5px;"></p>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title is-bold">
+              <img src="static/images/icon.png" style="width:2em;vertical-align: middle" alt="Logo" />
+              <span class="mathvista" style="vertical-align: middle">TravelPlanner</span>
+            </h1>
+            <h2 class="subtitle is-3 publication-subtitle">
+              Toward Real-world Planning for Language Agents
+              <!-- <br> -->
+              <!-- with GPT-4V, Bard, and Other Large Multimodal Models -->
+            </h2>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://hsaest.github.io/">Jian Xie*</a><sup style="color:#6fbf73;">1</sup>,</span>
+              <span class="author-block">
+                <a href="https://drogozhang.github.io/">Kai Zhang*</a><sup style="color:#ed4b82;">2</sup>,</span>
+              <span class="author-block">
+                <a href="https://jiangjiechen.github.io/">Jiangjie Chen</a><sup style="color:#6fbf73;">1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://darthzhu.github.io/">Tinghui Zhu</a><sup style="color:#6fbf73">1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://renzelou.github.io/">Renze Lou</a><sup style="color:#ffac33">3</sup>,
+              </span>
+              <br>
+              <span class="author-block">
+                <a href="https://yuandong-tian.com/">Yuandong Tian</a><sup style="color:#7781bc">4</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=odFW4FoAAAAJ">Yanghua Xiao</a><sup
+                  style="color:#6fbf73;">1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://ysu1989.github.io/">Yu Su</a><sup style="color:#ed4b82;">2</sup>,
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup style="color:#6fbf73;">1</sup>Fudan University</span>
+              <span class="author-block"><sup style="color:#ed4b82">2</sup>The Ohio State University</span><br>
+              <span class="author-block"><sup style="color:#ffac33">3</sup>The Pennsylvania State University</span>
+              <span class="author-block"><sup style="color:#7781bc">4</sup>Meta AI</span><br>
+              <span class="author-block">* Equal Contribution</span><br>
+              <span class="author-block">† Corresponding to <a
+                  href="mailto:jianx0321@gmail.com">jianx0321@gmail.com</a>, <a
+                  href="mailto:zhang.13253@osu.edu">zhang.13253@osu.edu</a>, <a
+                  href="mailto:su.809@osu.edu">su.809@osu.edu</a></span>
+            </div>
+
+            <!-- <section> -->
+            <!-- <div class="section" id="org-banners" style="display:fle">
+              <a href="https://www.ucla.edu/" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/ucla.png" style="height:3em">
+              </a>
+              <a href="https://www.washington.edu/" target="blank" class="ext-link">
+                  <img class="center-block org-banner" src="static/images/uw.png" style="height:3em">
+              </a>
+              <a href="https://www.microsoft.com/en-us/research/" target="_blank" rel="external">
+                  <img class="center-block org-banner" src="static/images/microsoft.png" style="height:3em">
+              </a>
+            </div> -->
+            <!-- </section> -->
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <!-- @PAN TODO: change links -->
+                  <a href="https://arxiv.org/pdf/2310.02255.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2310.02255" class="external-link button is-normal is-rounded is-dark">
+                    <!-- <a href="https://lupantech.github.io/papers/arxiv23_mathvista.pdf"
+                   class="external-link button is-normal is-rounded is-dark"> -->
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/OSU-NLP-Group/TravelPlanner"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Dataset Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/osunlp/TravelPlanner"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <!-- <i class="far fa-images"></i> -->
+                      <p style="font-size:18px">🤗</p>
+                      <!-- 🔗 -->
+                    </span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+                <!-- Visualization Link. -->
+                <!-- <span class="link-block">
+                  <a href="https://mathvista.github.io/#visualization"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <p style="font-size:18px">🔮</p>
+                    </span>
+                    <span>Visualize</span>
+                  </a>
+                </span> -->
+                <!-- Leaderboard Link. -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <p style="font-size:18px">🏆</p>
+                    </span>
+                    <span>Leaderboard</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://huggingface.co/spaces/osunlp/TravelPlannerEnvironment"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <!-- <i class="far fa-images"></i> -->
+                      <!-- 💻🔗 -->
+                      <p style="font-size:18px">🌏</p>
+                    </span>
+                    <span>Environment</span>
+                  </a>
+                </span>
+                <!-- Twitter Link. -->
+                <span class="link-block">
+                  <a href="https://twitter.com/lupantech/status/1717313355780964608"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <!-- <i class="far fa-images"></i> -->
+                      <!-- 💻🔗 -->
+                      <p style="font-size:18px">🌐</p>
+                    </span>
+                    <span>Twitter</span>
+                  </a>
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="content has-text-centered">
+        <img src="static/images/main.png" alt="geometric reasoning" width="100%" />
+        <p> Overview of <img src="static/images/icon.png" style="width:1.0em;vertical-align: middle" alt="Logo" />
+          TravelPlanner. Given a query, language agents are tasked with employing various search tools to gather
+          information. Based on the collected information, language agents are expected to deliver a plan that not only
+          meet the user's needs specified in the query but also adheres to commonsense constraints.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- <section class="section">
+  <div class="container" style="margin-top: -150px; margin-bottom: -100px;">
+    <div class="columns is-centered m-6">
+      <div class="column is-full has-text-centered content">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/main.png" alt="geometric reasoning" width="100%"/>
+              <p>  Given a query, language agents are tasked with employing various search tools to gather information.<br> Based on the collected information, language agents are expected to deliver a plan that not only meet <br> the  user's needs specified in the query but also adheres to commonsense constraints. 
+            </div>
+          </div>
+          <div class="box m-5">
+            <div class="content has-text-centered">
+              <img src="static/images/tease_scores_gpt4v.png" alt="geometric reasoning" width="84%"/>
+              <p> Accuracy scores of one leading LLM (i.e., PoT GPT-4), four primary LMMs, random chance, and human performance our proposed 
+              <img src="static/images/mathvista.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>
+              <span class="mathvista">MathVista</span>
+              across mathematical reasoning and visual context types. PoT refers to program-of-thought prompting, and PoT GPT-4 is a textual LLM augmented with the caption and OCR text. GPT-4V is manually evaluated via the playground chatbot.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section> -->
+
+
+  <section class="section">
+    <div class="container" style="margin-bottom: 2vh;">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Introduction</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce TravelPlanner: a comprehensive benchmark designed to evaluate the planning abilities of
+              language agents in real-world scenarios across multiple dimensions.
+              Without losing generality, TravelPlanner casts travel planning as its test environment, with all relevant
+              information meticulously crafted to minimize data contamination.
+              TravelPlanner does not have a singular ground truth for each query.
+              Instead, the benchmark employs several pre-defined evaluation scripts to assess each tested plan,
+              determining whether the language agent can effectively use tools to create a plan that aligns with both
+              the implicit commonsense and explicit user needs outlined in the query (i.e., commonsense constraint and
+              hard constraint).
+              Every query in TravelPlanner has undergone thorough human verification to guarantee that feasible solutions
+              exist.
+              Additionally, TravelPlanner evaluates the language agent's capability by varying the breadth and depth of
+              planning, controlled through the number of travel days and the quantity of hard constraints.
+            </p>
+          </div>
+          <div>
+            <video controls>
+              <source src="static/images/TravelPlanner_video.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+  <!-- <section class="section">
+  <div class="container">
+    
+    <div class="columns is-centered">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3" id="leaderboard">Leaderboard on testmini</h2>
+        <div class="content">
+          <p class="mt-3">Accuracy scores on the <b>testmini</b> subset (1,000 examples) of <img src="static/images/mathvista.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>
+            <span class="mathvista">MathVista</span>.
+          </p>
+
+          <div id="testmini_leaderboard"></div> -->
+
+  <!-- <table class="js-sort-table" id="results">
+              <tr>
+                  <td class="js-sort-number"><strong>#</strong></td>
+                  <td class="js-sort-number"><strong>Model</strong></td>
+                  <td class="js-sort-number"><strong>Method</strong></td>
+                  <td class="js-sort-number"><strong>Source</strong></td>
+                  <td class="js-sort-number"><strong>Date</strong></td>
+                  <td class="js-sort-number"><strong><u>ALL</u></strong></td>
+                  <td class="js-sort-number"><strong>FQA</strong></td>
+                  <td class="js-sort-number"><strong>GPS</strong></td>
+                  <td class="js-sort-number"><strong>MWP</strong></td>
+                  <td class="js-sort-number"><strong>TQA</strong></td>
+                  <td class="js-sort-number"><strong>VQA</strong></td>
+                  <td class="js-sort-number"><strong>ALG</strong></td>
+                  <td class="js-sort-number"><strong>ARI</strong></td>
+                  <td class="js-sort-number"><strong>GEO</strong></td>
+                  <td class="js-sort-number"><strong>LOG</strong></td>
+                  <td class="js-sort-number"><strong>NUM</strong></td>
+                  <td class="js-sort-number"><strong>SCI</strong></td>
+                  <td class="js-sort-number"><strong>STA</strong></td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td><b>Human Performance*</b></td>
+                <td>-</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>60.3</b></td>
+                <td>59.7</td>
+                <td>48.4</td>
+                <td>73.0</td>
+                <td>63.2</td>
+                <td>55.9</td>
+                <td>50.9</td>
+                <td>59.2</td>
+                <td>51.4</td>
+                <td>40.7</td>
+                <td>53.8</td>
+                <td>64.9</td>
+                <td>63.9</td>                
+              </tr>
+              <tr>
+                <td>1</td>
+                <td><b class="best-score-text" style="color: #C6011F">Gemini Ultra🥇</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-12-06</td>
+                <td><b class="best-score-text" style="color: #C6011F">53.0</b></td>
+                <td>49.1</td>
+                <td>56.3</td>
+                <td>53.8</td>
+                <td>69.0</td>
+                <td>40.2</td>
+                <td>58.4</td>
+                <td>45.9</td>
+                <td>55.7</td>
+                <td>21.6</td>
+                <td>38.9</td>
+                <td>62.3</td>
+                <td>59.5</td>                      
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><b class="best-score-text" style="color: #C6011F">GPT-4V (Playground)🥈</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-15</td>
+                <td><b class="best-score-text" style="color: #C6011F">49.9</b></td>
+                <td>43.1</td>
+                <td>50.5</td>
+                <td>57.5</td>
+                <td>65.2</td>
+                <td>38.0</td>
+                <td>53.0</td>
+                <td>49.0</td>
+                <td>51.0</td>
+                <td>21.6</td>
+                <td>20.1</td>
+                <td>63.1</td>
+                <td>55.8</td>                      
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><b class="best-score-text" style="color: #C6011F">Gemini Pro 🥉</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-12-06</td>
+                <td><b class="best-score-text" style="color: #C6011F">45.2</b></td>
+                <td>47.6</td>
+                <td>40.4</td>
+                <td>39.3</td>
+                <td>61.4</td>
+                <td>39.1</td>
+                <td>45.2</td>
+                <td>38.8</td>
+                <td>41.0</td>
+                <td>10.8</td>
+                <td>32.6</td>
+                <td>54.9</td>
+                <td>56.8</td>                      
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><b>Qwen-VL-Plus</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://github.com/QwenLM/Qwen-VL" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-12-21</td>
+                <td><b>43.3</b></td>
+                <td>54.7</td>
+                <td>38.5</td>
+                <td>31.2</td>
+                <td>55.1</td>
+                <td>34.1</td>
+                <td>39.2</td>
+                <td>32.0</td>
+                <td>39.3</td>
+                <td>18.9</td>
+                <td>26.4</td>
+                <td>59.0</td>
+                <td>56.2</td>                             
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><b>SPHINX (V2)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://github.com/Alpha-VLLM/LLaMA2-Accessory/tree/main/SPHINX" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-11-17</td>
+                <td><b>36.7</b></td>
+                <td>54.7</td>
+                <td>16.4</td>
+                <td>23.1</td>
+                <td>41.8</td>
+                <td>43.0</td>
+                <td>20.6</td>
+                <td>33.4</td>
+                <td>17.6</td>
+                <td>24.3</td>
+                <td>21.5</td>
+                <td>43.4</td>
+                <td>51.5</td>                             
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><b>Multimodal Bard</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>34.8</b></td>
+                <td>26.0</td>
+                <td>47.1</td>
+                <td>29.6</td>
+                <td>48.7</td>
+                <td>26.8</td>
+                <td>46.5</td>
+                <td>28.6</td>
+                <td>47.8</td>
+                <td>13.5</td>
+                <td>14.9</td>
+                <td>47.5</td>
+                <td>33.0</td>                
+              </tr>
+              <tr>
+                <td>7</td>
+                <td><b>PoT GPT-4 (Caption+OCR) </b></td>
+                <td>Tool 🛠️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>33.9</b></td>
+                <td>30.1</td>
+                <td>39.4</td>
+                <td>30.6</td>
+                <td>39.9</td>
+                <td>31.3</td>
+                <td>37.4</td>
+                <td>31.7</td>
+                <td>41.0</td>
+                <td>18.9</td>
+                <td>20.1</td>
+                <td>44.3</td>
+                <td>37.9</td>                               
+              </tr>
+              <tr>
+                <td>8</td>
+                <td><b>CoT GPT-4 (Caption+OCR) </b></td>
+                <td>Tool 🛠️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>33.2</b></td>
+                <td>27.9</td>
+                <td>31.7</td>
+                <td>31.2</td>
+                <td>51.9</td>
+                <td>28.5</td>
+                <td>33.5</td>
+                <td>30.9</td>
+                <td>32.2</td>
+                <td>13.5</td>
+                <td>12.5</td>
+                <td>58.2</td>
+                <td>37.9</td>                               
+              </tr>
+              <tr>
+                <td>9</td>
+                <td><b>CoT ChatGPT (Caption+OCR)</b></td>
+                <td>Tool 🛠️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>33.2</b></td>
+                <td>27.5</td>
+                <td>29.3</td>
+                <td>36.0</td>
+                <td>49.4</td>
+                <td>29.1</td>
+                <td>31.0</td>
+                <td>32.9</td>
+                <td>31.0</td>
+                <td>16.2</td>
+                <td>17.4</td>
+                <td>50.8</td>
+                <td>37.2</td>                               
+              </tr>
+              <tr>
+                <td>10</td>
+                <td><b>CoT Claude-2 (Caption+OCR)</b></td>
+                <td>Tool 🛠️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>33.2</b></td>
+                <td>26.0</td>
+                <td>31.7</td>
+                <td>35.5</td>
+                <td>48.1</td>
+                <td>30.2</td>
+                <td>32.4</td>
+                <td>32.3</td>
+                <td>33.0</td>
+                <td>16.2</td>
+                <td>17.4</td>
+                <td>54.9</td>
+                <td>36.2</td>                             
+              </tr>
+              <tr>
+                <td>11</td>
+                <td><b>Gemini Nano 2</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-12-06</td>
+                <td><b>30.6</b></td>
+                <td>28.6</td>
+                <td>23.6</td>
+                <td>30.7</td>
+                <td>41.8</td>
+                <td>31.8</td>
+                <td>27.1</td>
+                <td>29.8</td>
+                <td>26.8</td>
+                <td>10.8</td>
+                <td>20.8</td>
+                <td>40.2</td>
+                <td>33.6</td>                      
+              </tr>
+              <tr>
+                <td>12</td>
+                <td><b>SPHINX (V1)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://github.com/Alpha-VLLM/LLaMA2-Accessory/blob/main/SPHINX/SPHINX_paper.pdf" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-11-09</td>
+                <td><b>27.5</b></td>
+                <td>23.4</td>
+                <td>23.1</td>
+                <td>21.5</td>
+                <td>39.9</td>
+                <td>34.1</td>
+                <td>25.6</td>
+                <td>28.1</td>
+                <td>23.4</td>
+                <td>16.2</td>
+                <td>17.4</td>
+                <td>40.2</td>
+                <td>23.6</td>                             
+              </tr>
+              <tr>
+                <td>13</td>
+                <td><b>Gemini Nano 1</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://storage.googleapis.com/deepmind-media/gemini/gemini_1_report.pdf" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-12-06</td>
+                <td><b>27.3</b></td>
+                <td>30.9</td>
+                <td>21.6</td>
+                <td>23.7</td>
+                <td>29.1</td>
+                <td>30.7</td>
+                <td>23.8</td>
+                <td>25.5</td>
+                <td>21.3</td>
+                <td>13.5</td>
+                <td>20.8</td>
+                <td>27.9</td>
+                <td>30.9</td>                      
+              </tr>
+              <tr>
+                <td>14</td>
+                <td><b>PoT ChatGPT (Caption+OCR)</b></td>
+                <td>Tool 🛠️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>26.8</b></td>
+                <td>24.5</td>
+                <td>26.4</td>
+                <td>23.7</td>
+                <td>33.5</td>
+                <td>27.9</td>
+                <td>27.8</td>
+                <td>26.1</td>
+                <td>28.0</td>
+                <td>18.9</td>
+                <td>13.2</td>
+                <td>33.6</td>
+                <td>29.9</td>                              
+              </tr>
+              <tr>
+                <td>15</td>
+                <td><b>LLaVA (LLaMA-2-13B)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>26.1</b></td>
+                <td>26.8</td>
+                <td>29.3</td>
+                <td>16.1</td>
+                <td>32.3</td>
+                <td>26.3</td>
+                <td>27.3</td>
+                <td>20.1</td>
+                <td>28.8</td>
+                <td>24.3</td>
+                <td>18.3</td>
+                <td>37.3</td>
+                <td>25.1</td>                               
+              </tr>
+              <tr>
+                <td>16</td>
+                <td><b>InstructBLIP (Vicuna-7B)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>25.3</b></td>
+                <td>23.1</td>
+                <td>20.7</td>
+                <td>18.3</td>
+                <td>32.3</td>
+                <td>35.2</td>
+                <td>21.8</td>
+                <td>27.1</td>
+                <td>20.7</td>
+                <td>18.9</td>
+                <td>20.4</td>
+                <td>33.0</td>
+                <td>23.1</td>                              
+              </tr>
+              <tr>
+                <td>17</td>
+                <td><b>LLaVAR</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>25.2</b></td>
+                <td>21.9</td>
+                <td>25.0</td>
+                <td>16.7</td>
+                <td>34.8</td>
+                <td>30.7</td>
+                <td>24.2</td>
+                <td>22.1</td>
+                <td>23.0</td>
+                <td>13.5</td>
+                <td>15.3</td>
+                <td>42.6</td>
+                <td>21.9</td>                               
+              </tr>
+              <tr>
+                <td>18</td>
+                <td><b>LLaMA-Adapter-V2 (7B)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>23.9</b></td>
+                <td>21.2</td>
+                <td>25.5</td>
+                <td>11.3</td>
+                <td>32.3</td>
+                <td>31.8</td>
+                <td>26.3</td>
+                <td>20.4</td>
+                <td>24.3</td>
+                <td>24.3</td>
+                <td>13.9</td>
+                <td>29.5</td>
+                <td>18.3</td>                              
+              </tr>
+              <tr>
+                <td>19</td>
+                <td><b>miniGPT4 (LLaMA-2-7B)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>23.1</b></td>
+                <td>18.6</td>
+                <td>26.0</td>
+                <td>13.4</td>
+                <td>30.4</td>
+                <td>30.2</td>
+                <td>28.1</td>
+                <td>21.0</td>
+                <td>24.7</td>
+                <td>16.2</td>
+                <td>16.7</td>
+                <td>25.4</td>
+                <td>17.9</td>                              
+              </tr>
+              <tr>
+                <td>20</td>
+                <td><b>mPLUG-Owl (LLaMA-7B)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>22.2</b></td>
+                <td>22.7</td>
+                <td>23.6</td>
+                <td>10.2</td>
+                <td>27.2</td>
+                <td>27.9</td>
+                <td>23.6</td>
+                <td>19.2</td>
+                <td>23.9</td>
+                <td>13.5</td>
+                <td>12.7</td>
+                <td>26.3</td>
+                <td>21.4</td>                            
+              </tr>
+              <tr>
+                <td>21</td>
+                <td><b>IDEFICS (9B-Instruct)</b></td>
+                <td>LMM 🖼️</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>19.8</b></td>
+                <td>21.6</td>
+                <td>21.1</td>
+                <td>6.5</td>
+                <td>25.9</td>
+                <td>24.0</td>
+                <td>22.1</td>
+                <td>15.0</td>
+                <td>19.8</td>
+                <td>18.9</td>
+                <td>9.9</td>
+                <td>24.6</td>
+                <td>18.1</td>                               
+              </tr>
+              <tr>
+                <td>22</td>
+                <td><b>Random Chance</b></td>
+                <td>-</td>
+                <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+                <td>2023-10-03</td>
+                <td><b>17.9</b></td>
+                <td>18.2</td>
+                <td>21.6</td>
+                <td>3.8</td>
+                <td>19.6</td>
+                <td>26.3</td>
+                <td>21.7</td>
+                <td>14.7</td>
+                <td>20.1</td>
+                <td>13.5</td>
+                <td>8.3</td>
+                <td>17.2</td>
+                <td>16.3</td>                               
+              </tr>                                                              
+          </table> -->
+
+  <!-- <b>Human Performance*:</b> Average human performance from AMT annotators who have high school diplomas or above.
+          <br>
+          <b>Method types:</b> <b>LMM 🖼️:</b> Large Multimodal Model, <b>Tool 🛠️:</b> Tool-augmented Large Language Model.
+          <br>
+          <b>Task types:</b> <b>FQA:</b> figure QA,
+          <b>GPS:</b> geometry problem solving,
+          <b>MWP:</b> math word problem,
+          <b>TQA:</b> textbook QA,
+          <b>VQA:</b> visual QA.
+          <br>
+          <b>Math reasoning types:</b> 
+          <b>ALG:</b> algebraic,
+          <b>ARI:</b> arithmetic,
+          <b>GEO:</b> geometry,
+          <b>LOG:</b> logical ,
+          <b>NUM:</b> numeric,
+          <b>SCI:</b> scientific,
+          <b>STA:</b> statistical.
+          <br>
+          <br>
+          <div>
+          <p>🚨 To submit your results to the leaderboard, please send to <a href="mailto:lupantech@gmail.com">this email</a> with your result json files.
+            </p>
+          </div>
+
+        </div>
+
+        <h2 class="title is-3" id="leaderboard_test">Leaderboard on test</h2>
+        <div class="content">
+          <p class="mt-3">Accuracy scores on the <b>test</b> subset (5,141 examples) of <img src="static/images/mathvista.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>
+            <span class="mathvista">MathVista</span>.
+          </p>
+
+          <table class="js-sort-table" id="results">
+            <tr>
+                <td class="js-sort-number"><strong>#</strong></td>
+                <td class="js-sort-number"><strong>Model</strong></td>
+                <td class="js-sort-number"><strong>Method</strong></td>
+                <td class="js-sort-number"><strong>Source</strong></td>
+                <td class="js-sort-number"><strong>Date</strong></td>
+                <td class="js-sort-number"><strong><u>ALL</u></strong></td>
+                <td class="js-sort-number"><strong>FQA</strong></td>
+                <td class="js-sort-number"><strong>GPS</strong></td>
+                <td class="js-sort-number"><strong>MWP</strong></td>
+                <td class="js-sort-number"><strong>TQA</strong></td>
+                <td class="js-sort-number"><strong>VQA</strong></td>
+                <td class="js-sort-number"><strong>ALG</strong></td>
+                <td class="js-sort-number"><strong>ARI</strong></td>
+                <td class="js-sort-number"><strong>GEO</strong></td>
+                <td class="js-sort-number"><strong>LOG</strong></td>
+                <td class="js-sort-number"><strong>NUM</strong></td>
+                <td class="js-sort-number"><strong>SCI</strong></td>
+                <td class="js-sort-number"><strong>STA</strong></td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td><b class="best-score-text">Qwen-VL-Plus 🥇</b></td>
+              <td>LMM 🖼️</td>
+              <td><a href="https://github.com/QwenLM/Qwen-VL" class="ext-link" style="font-size: 16px;">Link</a></td>
+              <td>2023-12-26</td>
+              <td><b class="best-score-text">44.33</b></td>
+              <td>55.9</td>
+              <td>34.7</td>
+              <td>29.7</td>
+              <td>58.8</td>
+              <td>42.4</td>
+              <td>40.7</td>
+              <td>35.4</td>
+              <td>36.6</td>
+              <td>21.6</td>
+              <td>30.4</td>
+              <td>55.9</td>
+              <td>56.3</td>                                  
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><b class="best-score-text">PoT GPT-4 (Caption+OCR) 🥈</b></td>
+              <td>Tool 🛠️</td>
+              <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+              <td>2023-10-03</td>
+              <td><b class="best-score-text">31.74</b></td>
+              <td>27.6</td>
+              <td>37.4</td>
+              <td>23.9</td>
+              <td>43.0</td>
+              <td>30.3</td>
+              <td>37.1</td>
+              <td>27.9</td>
+              <td>37.5</td>
+              <td>22.7</td>
+              <td>15.8</td>
+              <td>44.5</td>
+              <td>31.9</td>                                  
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><b class="best-score-text">CoT GPT4 (Caption+OCR) 🥉</b></td>
+              <td>Tool 🛠️</td>
+              <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+              <td>2023-10-03</td>
+              <td><b class="best-score-text">30.50</b></td>
+              <td>27.2</td>
+              <td>35.9</td>
+              <td>21.3</td>
+              <td>43.1</td>
+              <td>28.2</td>
+              <td>35.7</td>
+              <td>25.2</td>
+              <td>35.8</td>
+              <td>24.7</td>
+              <td>15.4</td>
+              <td>47.3</td>
+              <td>31.3</td>                               
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><b>LLaVA (LLaMA-2-13B)</b></td>
+              <td>LMM 🖼️</td>
+              <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+              <td>2023-10-03</td>
+              <td><b>25.40</b></td>
+              <td>22.9</td>
+              <td>24.6</td>
+              <td>18.1</td>
+              <td>35.8</td>
+              <td>29.7</td>
+              <td>26.9</td>
+              <td>22.5</td>
+              <td>24.4</td>
+              <td>19.1</td>
+              <td>19.1</td>
+              <td>34.7</td>
+              <td>21.6</td>                                 
+            </tr>
+            <tr>
+              <td>*</td>
+              <td><b>Random Chance</b></td>
+              <td>-</td>
+              <td><a href="https://arxiv.org/abs/2310.02255" class="ext-link" style="font-size: 16px;">Link</a></td>
+              <td>2023-10-03</td>
+              <td><b>17.86</b></td>
+              <td>15.5</td>
+              <td>24.1</td>
+              <td>4.5</td>
+              <td>23.4</td>
+              <td>24.3</td>
+              <td>25.8</td>
+              <td>13.8</td>
+              <td>22.7</td>
+              <td>13.4</td>
+              <td>8.8</td>
+              <td>15.8</td>
+              <td>14.3</td>                                                  
+            </tr>                                                      
+        </table>
+
+          <b>Human Performance*:</b> Average human performance from AMT annotators who have high school diplomas or above.
+          <br>
+          <b>Method types:</b> <b>LMM 🖼️:</b> Large Multimodal Model, <b>Tool 🛠️:</b> Tool-augmented Large Language Model.
+          <br>
+          <b>Task types:</b> <b>FQA:</b> figure QA,
+          <b>GPS:</b> geometry problem solving,
+          <b>MWP:</b> math word problem,
+          <b>TQA:</b> textbook QA,
+          <b>VQA:</b> visual QA.
+          <br>
+          <b>Math reasoning types:</b> 
+          <b>ALG:</b> algebraic,
+          <b>ARI:</b> arithmetic,
+          <b>GEO:</b> geometry,
+          <b>LOG:</b> logical ,
+          <b>NUM:</b> numeric,
+          <b>SCI:</b> scientific,
+          <b>STA:</b> statistical.
+          <br>
+          <br>
+          <div>
+          <p>🚨 To submit your results to the leaderboard, please send to <a href="mailto:lupantech@gmail.com">this email</a> with your result json files.</p>
+          <p>🚨 For more submission details, please refer to <a href="https://github.com/lupantech/MathVista?tab=readme-ov-file#-leaderboard-">this link</a> and <a href="https://github.com/lupantech/MathVista?tab=readme-ov-file#-evaluations-on-mathvista">this link</a>.
+          </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section> -->
+
+  <!-- DATASET SECTION -->
+  <section class="hero is-light is-small">
+    <div class="hero-body has-text-centered">
+      <!-- <h1 class="title is-1 mathvista"><img src="static/images/mathvista.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>MathVista Dataset</h1> -->
+      <h1 class="title is-1 mathvista">
+        <img src="static/images/icon.png" style="width:1em;vertical-align: middle" alt="Logo" />
+        <span class="mathvista" style="vertical-align: middle">TravelPlanner Dataset</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- <section class="section">
+  <div class="container" style="margin-bottom: 2vh;">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Introduction</h2>
+        <div class="content has-text-justified">
+          <p> -->
+
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <!-- <div class="column is-full-width has-text-centered"> -->
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <p>
+
+              We introduce <img src="static/images/icon.png" style="width:1.0em;vertical-align: middle"
+                alt="Logo" />TravelPlanner, a benchmark crafted for evaluating language agents in tool-use and complex
+              planning within multiple constraints.
+              Grounded in travel planning, a real world use-case that naturally includes diverse constraints such as
+              user needs and commonsense constraints in the environment, TravelPlanner evaluates whether language agents
+              can develop reasonable travel plans by collecting information via diverse tools and making decisions,
+              while satisfying the constraints.
+              For a given query, language agents are expected to formulate a comprehensive plan that includes
+              transportation, daily meals, attractions, and accommodation for each day.
+              For constraints, from the perspective of real world applications, we design three types of them:
+              Environment Constraint, Commonsense Constraint, and Hard Constraint.
+              TravelPlanner comprises 1,225 queries in total. The number of days and hard constraints are designed to test
+              agents' abilities across both the breadth and depth of complex planning.
+            </p>
+
+            <!-- <div class="content has-text-centered">
+            <img src="static/images/source_dataset.png" alt="geometric reasoning" width="60%"/>
+            <p> Summary of the 31 different source datasets in <img src="static/images/mathvista.png" style="width:1.0em;vertical-align: middle" alt="Logo"/>
+              <span class="mathvista">MathVista</span>.
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <img src="static/images/our_new_3_datasets.png" alt="geometric reasoning" width="70%"/>
+            <p> Examples of our newly annotated datasets: IQTest, FunctionQA, and PaperQA.</p>
+          </div> -->
+
+            <p>
+              And the benchmark is divided into the training, validation, and test set.
+              <!-- @PAN TODO: add download links -->
+            <ul>
+              <li><b>Train Set</b>: 5 queries with corresponding human-annotated plans for group, resulting in a total
+                of 45 query-plan pairs.
+              <li><b>Validation Set</b>: 20 queries from each group, amounting to 180 queries in total.
+              <li><b>Test Set</b>: 1,000 randomly distributed queries.
+            </ul>
+            Download the dataset on <a href="https://huggingface.co/datasets/osunlp/TravelPlanner" target="_blank">Hugging
+              Face Dataset</a>.
+            </p>
+            <div class="content has-text-centered">
+              <img src="static/images/statistics/dataset.png" alt="data-overview"
+                style="max-height: 50%; max-width: 50%;" />
+              <p>
+                Dataset distribution of TravelPlanner.
+              </p>
+            </div>
+            <p>
+            Examples in train set:
+            </p>
+            <div id="results-carousel" class="carousel results-carousel">
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json1"></code></pre>
+                  <p> Easy Level & 3-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json2"></code></pre>
+                  <p> Easy Level & 5-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json3"></code></pre>
+                  <p> Easy Level & 7-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json4"></code></pre>
+                  <p> Medium Level & 3-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json5"></code></pre>
+                  <p> Medium Level & 5-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json6"></code></pre>
+                  <p> Medium Level & 7-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json7"></code></pre>
+                  <p> Hard Level & 3-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json8"></code></pre>
+                  <p> Hard Level & 5-day</p>
+                </div>
+              </div>
+              <div class="box m-5">
+                <div class="content has-text-centered">
+                  <pre><code class="json" id="json9"></code></pre>
+                  <p> Hard Level & 7-day</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="columns is-centered m-6">
+        <div class="column is-full has-text-centered content">
+          <h2 class="title is-3">Constraint</h2>
+          <div class="container is-max-desktop">
+            <div class="content has-text-centered">
+              <img src="static/images/constraint_description.png" alt="data-overview" style="max-width: 100%;" />
+              <p><img src="static/images/icon.png" style="width:1.0em;vertical-align: middle" alt="Logo" />TravelPlanner
+                Constraint description. The environment constraint is manifested through the feedback received from the
+                environment, assessing whether the language agent can adjust its plan appropriately. The commonsense
+                constraint and hard constraint are evaluated based on how well the language agent's plan aligns with
+                these specific criteria.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="columns is-centered m-6">
+        <div class="column is-full has-text-centered content">
+          <h2 class="title is-3">Tool</h2>
+          <div class="container is-max-desktop">
+            <div class="content has-text-centered">
+              <img src="static/images/tool_description.png" alt="data-overview" style="max-width: 100%;" />
+              <p><img src="static/images/icon.png" style="width:1.0em;vertical-align: middle" alt="Logo" />Tool description and the number of items in the database. The original data for each tool is sourced from publicly available internet data. We then modify this data, which includes adding, deleting, and altering certain keys and values to suit our requirements. In this way, we effectively avoid the problem of data contamination.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESULTS SECTION -->
+  <section class="hero is-light is-small">
+    <div class="hero-body has-text-centered">
+      <h1 class="title is-1 mathvista">Experiment Results</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="columns is-centered m-6">
+        <div class="column is-full has-text-centered content">
+          <h2 class="title is-3">Results on Existing Large Language Models and Planning Strategies</h2>
+          <!-- <p>One example for each reasoning skill required in <span class="mathvista">MathVista</span></p> -->
+          <div id="results-carousel" class="carousel results-carousel">
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-figures/main_results.png" alt="grade-lv" height="50%" />
+                <p>Main results of different LLMs and planning strategies on the TravelPlanner validation and test set. The best results are marked in bold. 
+                </p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-figures/tool_use_error.png" alt="grade-lv" width="80%" />
+                <p>
+                  Tool-use error distribution on test set. We set the maximum tool-use process step as 30. An agent will trigger an early stop if it either makes three consecutive failed attempts or repeats an action thrice consecutively, indicating a dead loop.
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-figures/constraint_pass_rate.png" alt="grade-lv" width="50%" />
+                <p>Constraint pass rate of GPT-4-Turbo on test set. The results of sole-planning mode are based on Direct strategy. Note that plans failing to meet the ``Within Sandbox'' or ``No Missed Key Information'' criteria are excluded from the hard constraint pass rate calculation. This exclusion is due to the fact that information beyond the sandbox's scope or key details that are missed cannot be effectively searched or evaluated.</p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-figures/information_collection_comparison.png" alt="contexts" width="90%" />
+                <p>Comparison of Information Collection Numbers Between GPT-4-Turbo and Reference. The results of GPT-4-Turbo are based on the number of entries it write into the working memory through the ``NotebookWrite''.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered m-6">
+        <div class="column is-full has-text-centered content">
+          <h2 class="title is-3">Case Study</h2>
+          <!-- <p>One example for each reasoning skill required in <span class="mathvista">MathVista</span></p> -->
+          <div id="results-carousel" class="carousel results-carousel">
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-examples/1.png" alt="grade-lv" width="40%" />
+                <p>GPT-4-Turbo + ReAct in tool-use scenario.  
+                </p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-examples/2.png" alt="grade-lv" width="40%" />
+                <p>
+                  GPT-4-Turbo + Direct Planning in sole-planning scenario.  
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-examples/3.png" alt="grade-lv" width="40%" />
+                <p>GPT-4-Turbo + Reflexion Planning in sole-planning scenario.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- @PAN TODO: bibtex -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">BibTeX</h2>
+      <pre><code>@article{Xie2024TravelPlanner,
+  author    = {},
+  title     = {TravelPlanner: Toward Real-World Planning with Language Agents},
+  journal   = {},
+  year      = {2024}
+}</code></pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="section" id="org-banners" style="display:flex">
+      <a href="https://www.fudan.edu.cn/en/" target="_blank" rel="external">
+        <img class="center-block org-banner" src="static/images/fdu.png">
+      </a>
+      <a href="https://www.osu.edu/" target="blank" class="ext-link">
+        <img class="center-block org-banner" src="static/images/osu.svg">
+      </a>
+      <a href="https://www.psu.edu/" target="_blank" rel="external">
+        <img class="center-block org-banner" src="static/images/psu.png">
+      </a>
+      <a href="https://ai.meta.com/" target="_blank" rel="external">
+        <img class="center-block org-banner" src="static/images/meta.png">
+      </a>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <!-- <div class="container"> -->
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is website adapted from <a href="https://nerfies.github.io/">Nerfies</a> and <a href="https://mathvista.github.io/">MathVista</a>, licensed under a <a
+              rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </footer>
+
+</body>
+
+</html>
