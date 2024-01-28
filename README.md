@@ -98,7 +98,7 @@ python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_n
 If you have any problems, please contact 
 [JIan Xie](mailto:jianx0321@gmial.com),
 [Kai Zhang](mailto:zhang.13253@osu.edu),
-[Yu Su](mailto:su.809@osu.edu),
+[Yu Su](mailto:su.809@osu.edu)
 
 ## Citation Information
 
