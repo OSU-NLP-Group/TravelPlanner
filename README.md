@@ -91,10 +91,19 @@ python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_n
 
 ## TODO
 
-- [x] Release Environment
-- [x] Baseline Code
-- [x] Query Construction Code
-- [x] Evaluation Code
+- ##### Code
+
+  - [x] Baseline Code
+
+  - [x] Query Construction Code
+
+  - [x] Evaluation Code
+  - [ ] Plan Parsing and Element Extraction Code
+
+- ##### Environment
+
+  - [x] Release Environment Database
+  - [ ] Database Field Introduction
 
 ## Contact
 
