@@ -11,7 +11,7 @@ import numpy as np
 
 google_distance = GoogleDistanceMatrix()
 
-city_set = open('/home/user/app/database/background/citySet_with_states.txt').read().strip().split('\n')
+city_set = open('../database/background/citySet_with_states.txt').read().strip().split('\n')
 
 state_city_map = {}
 
@@ -49,7 +49,7 @@ def select_consecutive_dates(num_days, start_date=datetime(2022, 3, 1), end_date
 
 def get_org_dest(days:int):
     if days == 3:
-        city_set = open('/home/user/app/database/background/citySet_with_states.txt').read().strip().split('\n')
+        city_set = open('../database/background/citySet_with_states.txt').read().strip().split('\n')
 
         org = random.choice(city_set)
 
@@ -63,7 +63,7 @@ def get_org_dest(days:int):
 
     elif days in [5,7]:
     
-        state_set = open('/home/user/app/database/background/citySet_with_states.txt').read().strip().split('\n')
+        state_set = open('../database/background/citySet_with_states.txt').read().strip().split('\n')
         org = random.choice(state_set)
 
         while True:
@@ -224,7 +224,9 @@ def generate_elements(number:int, level="easy", day_list=[3,5,7]):
             continue
     return query_list
 
-def main():
+
+if __name__ == "__main__":
+
     """Generate the elements for the different level query."""
 
     # save query_list as jsonl file
@@ -237,7 +239,3 @@ def main():
                 json.dump(query, f)
                 f.write('\n')
             f.close()
-
-
-if __name__ == "__main__":
-    main()

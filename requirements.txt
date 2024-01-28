@@ -1,5 +1,7 @@
-datasets==2.14.5
+langchain==0.0.345
+pandas==2.0.1
+tiktoken==0.4.0
+openai==0.27.2
+langchain_google_genai==0.0.4
 gradio==3.50.2
-huggingface-hub==0.20.2
-APScheduler==3.10.1
-requests==2.27.1
+datasets==2.15.0

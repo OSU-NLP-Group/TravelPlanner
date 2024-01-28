@@ -1,10 +1,10 @@
 import pandas as pd
 from pandas import DataFrame
 from typing import Optional
-from annotation.src.utils import extract_before_parenthesis
+from utils.func import extract_before_parenthesis
 
 class Restaurants:
-    def __init__(self, path="/home/user/app/database/restaurants/clean_restaurant_2022.csv"):
+    def __init__(self, path="../database/restaurants/clean_restaurant_2022.csv"):
         self.path = path
         self.data = pd.read_csv(self.path).dropna()[['Name','Average Cost','Cuisines','Aggregate Rating','City']]
         print("Restaurants loaded.")
@@ -29,7 +29,7 @@ class Restaurants:
         #     results = results.sort_values(by=["Aggregate Rating"], ascending=False)
         if len(results) == 0:
             return "There is no restaurant in this city."
-        return results
+        return results.to_string()
 
     def run_for_annotation(self,
             city: str,

@@ -1,11 +1,11 @@
 import pandas as pd
 from pandas import DataFrame
 from typing import Optional
-from annotation.src.utils import extract_before_parenthesis
+from utils.func import extract_before_parenthesis
 
 class Flights:
 
-    def __init__(self, path="/home/user/app/database/flights/clean_Flights_2022.csv"):
+    def __init__(self, path="../database/flights/clean_Flights_2022.csv"):
         self.path = path
         self.data = None
 
@@ -61,7 +61,7 @@ class Flights:
         #     results = results.sort_values(by=["ArrTime"], ascending=True)
         # elif order == "descArrTime":
         #     results = results.sort_values(by=["ArrTime"], ascending=False)
-        return results
+        return results.to_string(index=False)
 
     def get_city_set(self):
         city_set = set()

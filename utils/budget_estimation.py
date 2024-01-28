@@ -1,8 +1,6 @@
 from tools.accommodations.apis import Accommodations
 from tools.flights.apis import Flights
 from tools.restaurants.apis import Restaurants
-from tools.rank.apis import Rank
-from tools.filter.apis import Filter
 from tools.googleDistanceMatrix.apis import GoogleDistanceMatrix
 import pandas as pd
 
@@ -10,8 +8,6 @@ hotel = Accommodations()
 flight = Flights()
 flight.load_db()
 restaurant = Restaurants()
-rank = Rank()
-filter = Filter()
 distanceMatrix = GoogleDistanceMatrix()
 
 
@@ -56,7 +52,7 @@ def budget_calc(org, dest, days, date:list , people_number=None, local_constrain
 
 
     elif grain == "state":
-        city_set = open('/home/user/app/database/background/citySet_with_states.txt').read().strip().split('\n')
+        city_set = open('../database/background/citySet_with_states.txt').read().strip().split('\n')
         
         all_hotel_data = []
         all_restaurant_data = []
@@ -164,10 +160,6 @@ def budget_calc(org, dest, days, date:list , people_number=None, local_constrain
             elif days == 7:
                 if len(restaurant_data) < 7:
                     raise ValueError("No restaurant data available for the given constraints.")
-                
-        # hotel_data = filter.run(hotel_data, local_constraint)
-        # restaurant_data = filter.run(restaurant_data, local_constraint)
-        # flight_data = filter.run(flight_data, local_constraint)
 
     # Calculate budgets for all three modes
 

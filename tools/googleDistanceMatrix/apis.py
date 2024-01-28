@@ -1,5 +1,5 @@
 import requests
-from annotation.src.utils import extract_before_parenthesis
+from utils.func import extract_before_parenthesis
 import os
 from requests.exceptions import SSLError
 import time
@@ -7,11 +7,14 @@ import sys
 import pandas as pd
 import numpy as np
 
+os.environ["http_proxy"] = "http://127.0.0.1:7890"
+os.environ["https_proxy"] = "http://127.0.0.1:7890"
+
 
 class GoogleDistanceMatrix:
     def __init__(self, subscription_key: str="") -> None:
         self.gplaces_api_key: str = subscription_key
-        self.data =  pd.read_csv('/home/user/app/database/googleDistanceMatrix/distance.csv')
+        self.data =  pd.read_csv('../database/googleDistanceMatrix/distance.csv')
         print("GoogleDistanceMatrix loaded.")
 
     def run(self, origin, destination, mode='driving'):

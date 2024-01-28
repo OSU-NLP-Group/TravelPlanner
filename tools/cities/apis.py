@@ -1,7 +1,7 @@
 from pandas import DataFrame
 
 class Cities:
-    def __init__(self ,path="/home/user/app/database/background/citySet_with_states.txt") -> None:
+    def __init__(self ,path="../database/background/citySet_with_states.txt") -> None:
         self.path = path
         self.load_data()
         print("Cities loaded.")

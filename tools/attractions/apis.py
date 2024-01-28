@@ -1,11 +1,11 @@
 import pandas as pd
 from pandas import DataFrame
 from typing import Optional
-from annotation.src.utils import extract_before_parenthesis
+from utils.func import extract_before_parenthesis
 
 
 class Attractions:
-    def __init__(self, path="/home/user/app/database/attractions/attractions.csv"):
+    def __init__(self, path="../database/attractions/attractions.csv"):
         self.path = path
         self.data = pd.read_csv(self.path).dropna()[['Name','Latitude','Longitude','Address','Phone','Website',"City"]]
         print("Attractions loaded.")
