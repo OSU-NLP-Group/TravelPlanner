@@ -7,9 +7,6 @@ import sys
 import pandas as pd
 import numpy as np
 
-os.environ["http_proxy"] = "http://127.0.0.1:7890"
-os.environ["https_proxy"] = "http://127.0.0.1:7890"
-
 
 class GoogleDistanceMatrix:
     def __init__(self, subscription_key: str="") -> None:

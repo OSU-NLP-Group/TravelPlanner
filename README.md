@@ -89,9 +89,12 @@ cd tools/planner
 python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY
 ```
 
-## Acknowledgment
+## TODO
 
-
+- [x] Release Environment
+- [x] Baseline Code
+- [x] Query Construction Code
+- [x] Evaluation Code
 
 ## Contact
 

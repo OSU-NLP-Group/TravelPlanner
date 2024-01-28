@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
 
     with get_openai_callback() as cb:
-        for number in tqdm(numbers[:1]):
+        for number in tqdm(numbers[:]):
             
             query_data = query_data_list[number-1]
             reference_information = query_data['reference_information']
