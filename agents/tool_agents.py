@@ -644,7 +644,6 @@ if __name__ == '__main__':
         query_data_list  = load_dataset('osunlp/TravelPlanner','test')['test']
     numbers = [i for i in range(1,len(query_data_list)+1)]
     agent = ReactAgent(None, tools=tools_list,max_steps=30,react_llm_name=args.model_name,planner_llm_name=args.model_name)
-    redo_list = [i for i in range(1,len(query_data_list)+1)]
     with get_openai_callback() as cb:
         
         for number in tqdm(numbers[:]):
@@ -657,13 +656,10 @@ if __name__ == '__main__':
             else:
                 result = json.load(open(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{number}.json')))
                 
-            if number not in redo_list:
-                planner_results, scratchpad, action_log = result[-1][f'{args.model_name}_two-stage_results'],result[-1][f'{args.model_name}_two-stage_results_logs'],result[-1][f'{args.model_name}_two-stage_action_logs']
-            else:
-                while True:
-                    planner_results, scratchpad, action_log  = agent.run(query)
-                    if planner_results != None:
-                        break
+            while True:
+                planner_results, scratchpad, action_log  = agent.run(query)
+                if planner_results != None:
+                    break
             
             if planner_results == 'Max Token Length Exceeded.':
                 result[-1][f'{args.model_name}_two-stage_results_logs'] = scratchpad 
