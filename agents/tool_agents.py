@@ -36,8 +36,6 @@ GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
 
 pd.options.display.max_info_columns = 200
 
-os.environ["http_proxy"] = "http://127.0.0.1:7890"
-os.environ["https_proxy"] = "http://127.0.0.1:7890"
 os.environ['TIKTOKEN_CACHE_DIR'] = './tmp'
 
 actionMapping = {"FlightSearch":"flights","AttractionSearch":"attractions","GoogleDistanceMatrix":"googleDistanceMatrix","accommodationSearch":"accommodation","RestaurantSearch":"restaurants","Planner":"planner","NotebookWrite":"notebook","CitySearch":"cities"}
