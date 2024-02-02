@@ -600,13 +600,13 @@
             <div class="box m-5">
               <div class="content has-text-centered">
                 <img src="static/images/results-figures/constraint_pass_rate.png" alt="grade-lv" width="50%" />
-                <p>Constraint pass rate of GPT-4-Turbo on test set. The results of sole-planning mode are based on Direct strategy. Note that plans failing to meet the ``Within Sandbox'' or ``No Missed Key Information'' criteria are excluded from the hard constraint pass rate calculation. This exclusion is due to the fact that information beyond the sandbox's scope or key details that are missed cannot be effectively searched or evaluated.</p>
+                <p>Constraint pass rate of GPT-4-Turbo on test set. The results of sole-planning mode are based on Direct strategy. Note that plans failing to meet the "Within Sandbox" or "No Missed Key Information" criteria are excluded from the hard constraint pass rate calculation. This exclusion is due to the fact that information beyond the sandbox's scope or key details that are missed cannot be effectively searched or evaluated.</p>
               </div>
             </div>
             <div class="box m-5">
               <div class="content has-text-centered">
                 <img src="static/images/results-figures/information_collection_comparison.png" alt="contexts" width="90%" />
-                <p>Comparison of Information Collection Numbers Between GPT-4-Turbo and Reference. The results of GPT-4-Turbo are based on the number of entries it write into the working memory through the ``NotebookWrite''.</p>
+                <p>Comparison of the numbers of different tool uses between agent (GPT-4-Turbo) and reference. The results of agent are based on the number of entries written into the "Notebook".</p>
               </div>
             </div>
           </div>
@@ -680,6 +680,12 @@
                 <p>GPT-4-Turbo + Reflexion Planning in sole-planning scenario.</p>
               </div>
             </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/results-examples/10.png" alt="grade-lv" width="40%" />
+                <p>GPT-4-Turbo + Reflexion Planning in sole-planning scenario.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -694,7 +700,7 @@
       <h2 class="title is-3 has-text-centered">BibTeX</h2>
       <pre><code>@article{Xie2024TravelPlanner,
   author    = {},
-  title     = {TravelPlanner: Toward Real-World Planning with Language Agents},
+  title     = {TravelPlanner: A Benchmark for Real-World Planning with Language Agents},
   journal   = {},
   year      = {2024}
 }</code></pre>
