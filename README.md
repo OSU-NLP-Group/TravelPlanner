@@ -1,4 +1,4 @@
-<h1 align="center">TravelPlanner<br> Toward Real-World Planning with Language Agents </h1>
+<h1 align="center">TravelPlanner<br> A Benchmark for Real-World Planning with Language Agents </h1>
 
 ![Travel Planner](https://img.shields.io/badge/Task-Planning-blue)
 ![Travel Planner](https://img.shields.io/badge/Task-Tool_Use-blue) 
@@ -11,7 +11,7 @@
   Logo for <b>TravelPlanner</b>.
 </p>
 
-Code for the Paper "[TravelPlanner: Toward Real-World Planning with Language Agents]()".
+Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Language Agents]()".
 
 ![Demo Video GIF](images/TravelPlanner.gif)
 
@@ -121,7 +121,7 @@ If our paper or related resources prove valuable to your research, we kindly ask
 ```
 @article{Xie2024TravelPlanner,
   author    = {},
-  title     = {TravelPlanner: Toward Real-World Planning with Language Agents},
+  title     = {TravelPlanner: A Benchmark for Real-World Planning with Language Agents},
   journal   = {},
   year      = {2024}
 }
