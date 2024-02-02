@@ -1,4 +1,4 @@
-<h1 align="center">TravelPlanner<br> A Benchmark for Real-World Planning<br> with Language Agents </h1>
+<h1 align="center">TravelPlanner:<br> A Benchmark for Real-World Planning<br> with Language Agents </h1>
 
 ![Travel Planner](https://img.shields.io/badge/Task-Planning-blue)
 ![Travel Planner](https://img.shields.io/badge/Task-Tool_Use-blue) 
