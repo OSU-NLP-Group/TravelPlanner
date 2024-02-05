@@ -8,7 +8,6 @@
 
 <p align="center">
     <img src="images/icon.png" width="10%"> <br>
-  Logo for <b>TravelPlanner</b>.
 </p>
 
 Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Language Agents](http://arxiv.org/abs/2402.01622)".
