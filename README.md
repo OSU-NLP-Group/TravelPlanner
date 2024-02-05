@@ -21,7 +21,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 [<a href="https://huggingface.co/datasets/osunlp/TravelPlanner">Dataset</a>] •
 [<a href="https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard">Leaderboard</a>] •
 [<a href="https://huggingface.co/spaces/osunlp/TravelPlannerEnvironment">Environment</a>] •
-[<a href="https://twitter.com/ysu_nlp/status/1742398541660639637">Twitter</a>]
+[<a href="https://twitter.com/ysu_nlp/status/1754365367294562680">Twitter</a>]
 </p>
 
 
