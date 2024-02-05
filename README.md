@@ -11,7 +11,7 @@
   Logo for <b>TravelPlanner</b>.
 </p>
 
-Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Language Agents]()".
+Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Language Agents](http://arxiv.org/abs/2402.01622)".
 
 ![Demo Video GIF](images/TravelPlanner.gif)
 
