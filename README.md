@@ -89,6 +89,13 @@ cd tools/planner
 python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY
 ```
 
+## Load Datasets
+```python
+from datasets import load_dataset
+# test can be substituted by "train" and "validation".
+data = load_dataset('osunlp/TravelPlanner','test')['test']
+```
+
 ## TODO
 
 - ##### Code
