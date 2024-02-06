@@ -114,7 +114,7 @@ data = load_dataset('osunlp/TravelPlanner','test')['test']
 ## Contact
 
 If you have any problems, please contact 
-[Jian Xie](mailto:jianx0321@gmial.com),
+[Jian Xie](mailto:jianx0321@gmail.com),
 [Kai Zhang](mailto:zhang.13253@osu.edu),
 [Yu Su](mailto:su.809@osu.edu)
 
