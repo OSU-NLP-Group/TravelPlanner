@@ -119,35 +119,3 @@ class GoogleDistanceMatrix:
             info = {"duration": "N/A", "distance": "N/A", "cost": "N/A", "Hint":"Please check the input."}
         return info
     
-
-    def run_for_build_database(self, origin, destination):
-        # mode in ['driving','taxi','walking', 'distance','transit']
-        endpoint = "https://maps.googleapis.com/maps/api/distancematrix/json"
-
-        params = {
-            "origins": extract_before_parenthesis(origin),
-            "destinations": extract_before_parenthesis(destination),
-            "mode": "driving",
-            "key": self.gplaces_api_key
-        }
-
-        # response = requests.get(endpoint, params=params)
-        while True:
-            try:
-                response = requests.get(endpoint, params=params)
-                break
-            except:
-                # print the error
-                error = sys.exc_info()[0]
-                print(error)
-                time.sleep(30)
-
-        data = response.json()
-        info = {"origin": extract_before_parenthesis(origin), "destination": extract_before_parenthesis(destination),"cost": None, "duration": None, "distance": None}
-        if data['status'] == "OK":
-            element = data['rows'][0]['elements'][0]
-            if element['status'] == "OK":
-                info["duration"] = element['duration']['text']
-                info["distance"] = element['distance']['text']
-                
-        return info  
