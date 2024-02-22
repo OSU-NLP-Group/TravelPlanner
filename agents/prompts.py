@@ -10,13 +10,13 @@ Destination City: The city you aim to reach.
 Date: The date of your travel in YYYY-MM-DD format.
 Example: FlightSearch[New York, London, 2022-10-01] would fetch flights from New York to London on October 1, 2022.
 
-(2) DistanceMatrix[Origin, Destination, Mode]:
+(2) GoogleDistanceMatrix[Origin, Destination, Mode]:
 Description: Estimate the distance, time and cost between two cities.
 Parameters:
 Origin: The departure city of your journey.
 Destination: The destination city of your journey.
 Mode: The method of transportation. Choices include 'self-driving' and 'taxi'.
-Example: DistanceMatrix[Paris, Lyon, self-driving] would provide driving distance, time and cost between Paris and Lyon.
+Example: GoogleDistanceMatrix[Paris, Lyon, self-driving] would provide driving distance, time and cost between Paris and Lyon.
 
 (3) AccommodationSearch[City]:
 Description: Discover accommodations in your desired city.
@@ -39,7 +39,7 @@ Parameter: State – The name of the state where you're seeking cities.
 Example: CitySearch[California] would return cities in California.
 
 (7) NotebookWrite[Short Description]
-Description: Writes a new data entry into the Notebook tool with a short description. This tool should be used immediately after FlightSearch, AccommodationSearch, AttractionSearch, RestaurantSearch or DistanceMatrix. Only the data stored in Notebook can be seen by Planner. So you should write all the information you need into Notebook.
+Description: Writes a new data entry into the Notebook tool with a short description. This tool should be used immediately after FlightSearch, AccommodationSearch, AttractionSearch, RestaurantSearch or GoogleDistanceMatrix. Only the data stored in Notebook can be seen by Planner. So you should write all the information you need into Notebook.
 Parameters: Short Description - A brief description or label for the stored data. You don't need to write all the information in the description. The data you've searched for will be automatically stored in the Notebook.
 Example: NotebookWrite[Flights from Rome to Paris in 2022-02-01] would store the informatrion of flights from Rome to Paris in 2022-02-01 in the Notebook.
 
