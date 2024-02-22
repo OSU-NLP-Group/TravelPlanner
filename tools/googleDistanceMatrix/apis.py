@@ -7,6 +7,8 @@ import sys
 import pandas as pd
 import numpy as np
 
+# This tool refers to the "DistanceMatrix" in the paper. Considering this data obtained from Google API, we consistently use this name in the code. 
+# Please be assured that this will not influence the experiment results shown in the paper. 
 
 class GoogleDistanceMatrix:
     def __init__(self, subscription_key: str="") -> None:
