@@ -120,7 +120,7 @@ export SET_TYPE=validation
 export SUBMISSION_FILE_PATH=your/submission/file/path
 
 cd evaluation
-python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
+python eval.py --set_type $SET_TYPE --submission_file_path $SUBMISSION_FILE_PATH
 ```
 
 ## Load Datasets
