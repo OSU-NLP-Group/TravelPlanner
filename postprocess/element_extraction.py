@@ -51,6 +51,6 @@ if __name__ == '__main__':
                 generated_plan[-1][f'{args.model_name}{suffix}_{args.mode}_parsed_results'] = None
             else:
                 generated_plan[-1][f'{args.model_name}{suffix}_{args.mode}_parsed_results'] = None
-        # print(generated_plan[-1]['chatgpt_human_collected_info_results_parsed'])
+  
         with open(f'{args.output_dir}/{args.set_type}/generated_plan_{idx}.json','w') as f:
             json.dump(generated_plan,f)
