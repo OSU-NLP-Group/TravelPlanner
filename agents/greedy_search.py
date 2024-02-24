@@ -230,7 +230,12 @@ if __name__ == '__main__':
             plan_list[0]['finished'] = (True,[])
         
         # write to json file
-        generated_plan = json.load(open(f'{args.output_dir}/{args.set_type}/plan_{idx+1}.json'))
+        if not os.path.exists(os.path.join(f'{args.output_dir}/{args.set_type}')):
+            os.makedirs(os.path.join(f'{args.output_dir}/{args.set_type}'))
+        if not os.path.exists(os.path.join(f'{args.output_dir}/{args.set_type}/generated_plan_{idx+1}.json')):
+            generated_plan = [{}]
+        else:
+            generated_plan = json.load(open(f'{args.output_dir}/{args.set_type}/plan_{idx+1}.json'))
         generated_plan[-1]['greedy_search_plan_success'] = [plan_list[0]['finished'][0],list(plan_list[0]['finished'][1])]
         generated_plan[-1]['greedy_search_plan'] = plan_list[1:]
         # print(generated_plan[-1])
