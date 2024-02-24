@@ -76,7 +76,7 @@ def get_transportation(org,dest,date):
         transportation = f"Flight Number: {flight_info.sort_values(by=['Price'],ascending=True).iloc[0]['Flight Number']}"
     return True, transportation
     
-def get_meal(city, restaurant_data_list):
+def get_meal(city):
     restaurant = restaurants.run(city)
     if type(restaurant) == str:
         return False, None
@@ -87,7 +87,7 @@ def get_meal(city, restaurant_data_list):
             return True, f"{restaurant.iloc[idx]['Name']}, {city}"
     return False, None
 
-def get_attraction(city, attraction_data_list):
+def get_attraction(city):
     attraction = attractions.run(city)
     if type(attraction) == str:
         return False, None
@@ -201,7 +201,7 @@ if __name__ == '__main__':
 
             # print(current_city)
             for key in ['breakfast','lunch','dinner']:
-                flag, meal = get_meal(current_city, restaurant_list)
+                flag, meal = get_meal(current_city)
                 if flag:
                     plan[key] = f'{meal}'
                     restaurant_list.append(meal)
@@ -209,7 +209,7 @@ if __name__ == '__main__':
                     plan_list[0]['finished'][0] = False
                     plan_list[0]['finished'][1].add('No valid meal information.')
             
-            flag, attraction = get_attraction(current_city, attraction_list)
+            flag, attraction = get_attraction(current_city)
             if flag:
                 plan['attraction'] = f'{attraction}'
             else:

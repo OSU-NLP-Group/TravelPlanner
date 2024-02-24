@@ -29,7 +29,7 @@ class Restaurants:
         #     results = results.sort_values(by=["Aggregate Rating"], ascending=False)
         if len(results) == 0:
             return "There is no restaurant in this city."
-        return results.to_string()
+        return results
 
     def run_for_annotation(self,
             city: str,
