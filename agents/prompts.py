@@ -162,7 +162,7 @@ Dinner: Pind Balluchi, Charlotte
 Accommodation: Affordable Spacious Refurbished Room in Bushwick!, Charlotte
 
 Day 3:
-Current City: Charlotte
+Current City: from Charlotte to Ithaca
 Transportation: Flight Number: F3786167, from Charlotte to Ithaca, Departure Time: 21:42, Arrival Time: 23:26
 Breakfast: Subway, Charlotte
 Attraction: Books Monument, Charlotte.
@@ -211,7 +211,7 @@ Dinner: Pind Balluchi, Charlotte
 Accommodation: Affordable Spacious Refurbished Room in Bushwick!, Charlotte
 
 Day 3:
-Current City: Charlotte
+Current City: from Charlotte to Ithaca
 Transportation: Flight Number: F3786167, from Charlotte to Ithaca, Departure Time: 21:42, Arrival Time: 23:26
 Breakfast: Subway, Charlotte
 Attraction: Books Monument, Charlotte.
