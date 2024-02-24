@@ -1,8 +1,11 @@
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "..")))
 from commonsense_constraint import evaluation as commonsense_eval
 from hard_constraint import evaluation as hard_eval
 import json
 from tqdm import tqdm
 from datasets import load_dataset
+import argparse
 
 
 def load_line_json_data(filename):
@@ -37,12 +40,10 @@ def statistics(commonsense_statistic):
     return result
 
 
-def eval_score(validation_or_test: str, file_path: str, TOKEN):
+def eval_score(validation_or_test: str, file_path: str):
 
     if validation_or_test == 'validation':
-        query_data_list  = load_dataset('osunlp/TravelBenchEval','validation',token=TOKEN)['validation']
-    elif validation_or_test == 'test':
-        query_data_list  = load_dataset('osunlp/TravelBenchEval','test',token=TOKEN)['test']
+        query_data_list  = load_dataset('osunlp/TravelPlanner','validation',download_mode="force_redownload")['validation']
 
     query_data_list = [x for x in query_data_list]
     hardConstraint_statistic= {level:{day:[] for day in [3,5,7]} for level in ['easy','medium','hard']} 
@@ -179,3 +180,14 @@ def eval_score(validation_or_test: str, file_path: str, TOKEN):
 
     return result
 
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--set_type", type=str, default="validation")
+    parser.add_argument("--submission_file_path", type=str, default="./")
+    args = parser.parse_args()
+
+    scores = eval_score(args.set_type, file_path=args.submission_file_path)
+
+    for key in scores:
+        print(f"{key}: {scores[key]*100}%")

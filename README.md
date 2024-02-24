@@ -88,7 +88,43 @@ cd tools/planner
 python sole_planning.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY
 ```
 
+## Postprocess
+
+In order to parse natural language plans, we use gpt-4 to convert these plans into json formats. We encourage developers to try different parsing prompts to obtain better-formatted plans.
+
+```bash
+export OUTPUT_DIR=path/to/your/output/file
+export MODEL_NAME=MODEL_NAME
+export OPENAI_API_KEY=YOUR_OPENAI_KEY
+export SET_TYPE=validation
+export STRATEGY=direct
+export TMP_DIR=path/to/tmp/parsed/plan/file
+export SUBMISSION_DIR=path/to/your/submission/file
+
+cd postprocess
+python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
+
+# Then these parsed plans should be stored as the real json formats.
+python element_extraction.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
+
+# Finally, combine these plan files for submission. We also provide a submission example file "example_submission.jsonl" in the postprocess folder.
+python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --submission_file_dir $SUBMISSION_DIR
+```
+
+## Evaluation
+
+We support the offline validation set evaluation through the provided evaluation script. To avoid data contamination, please use our official [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard) for test set evaluation.
+
+```bash
+export SET_TYPE=validation
+export SUBMISSION_FILE_PATH=your/submission/file/path
+
+cd evaluation
+python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
+```
+
 ## Load Datasets
+
 ```python
 from datasets import load_dataset
 # test can be substituted by "train" and "validation".
@@ -104,7 +140,7 @@ data = load_dataset('osunlp/TravelPlanner','test')['test']
   - [x] Query Construction Code
 
   - [x] Evaluation Code
-  - [ ] Plan Parsing and Element Extraction Code
+  - [x] Plan Parsing and Element Extraction Code
 
 - ##### Environment
 
