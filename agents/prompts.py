@@ -218,7 +218,7 @@ Attraction: Books Monument, Charlotte.
 Lunch: Olive Tree Cafe, Charlotte
 Dinner: Kylin Skybar, Charlotte
 Accommodation: -]
-***** Sub Plan Ends *****
+***** Example Ends *****
 
 {reflections}
 
