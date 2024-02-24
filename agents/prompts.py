@@ -64,7 +64,7 @@ zeroshot_react_agent_prompt = PromptTemplate(
 PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and accommodation names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with commonsense. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B).
 
 ***** Example *****
-Query: Could you create a challenging travel plan for 7 people from Roanoke to Illinois spanning a week, from March 8th to March 14th, 2022, with a budget of $30,200? The preference is for an entire room, and we would not be taking any flights. In terms of cuisine, we are interested in sampling some Italian and Chinese food.
+Query: Could you create a travel plan for 7 people from Ithaca to Charlotte spanning 3 days, from March 8th to March 14th, 2022, with a budget of $30,200?
 Travel Plan:
 Day 1:
 Current City: from Ithaca to Charlotte
@@ -85,7 +85,7 @@ Dinner: Pind Balluchi, Charlotte
 Accommodation: Affordable Spacious Refurbished Room in Bushwick!, Charlotte
 
 Day 3:
-Current City: Charlotte
+Current City: from Charlotte to Ithaca
 Transportation: Flight Number: F3786167, from Charlotte to Ithaca, Departure Time: 21:42, Arrival Time: 23:26
 Breakfast: Subway, Charlotte
 Attraction: Books Monument, Charlotte.
@@ -102,7 +102,7 @@ Travel Plan:"""
 COT_PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provided information and query, please give me a detailed plan, including specifics such as flight numbers (e.g., F0123456), restaurant names, and hotel names. Note that all the information in your plan should be derived from the provided data. You must adhere to the format given in the example. Additionally, all details should align with common sense. Attraction visits and meals are expected to be diverse. The symbol '-' indicates that information is unnecessary. For example, in the provided sample, you do not need to plan after returning to the departure city. When you travel to two cities in one day, you should note it in the 'Current City' section as in the example (i.e., from A to B). 
 
 ***** Example *****
-Query: Could you create a challenging travel plan for 7 people from Roanoke to Illinois spanning a week, from March 8th to March 14th, 2022, with a budget of $30,200? The preference is for an entire room, and we would not be taking any flights. In terms of cuisine, we are interested in sampling some Italian and Chinese food.
+Query: Could you create a travel plan for 7 people from Ithaca to Charlotte spanning 3 days, from March 8th to March 14th, 2022, with a budget of $30,200?
 Travel Plan:
 Day 1:
 Current City: from Ithaca to Charlotte
@@ -123,7 +123,7 @@ Dinner: Pind Balluchi, Charlotte
 Accommodation: Affordable Spacious Refurbished Room in Bushwick!, Charlotte
 
 Day 3:
-Current City: Charlotte
+Current City: from Charlotte to Ithaca
 Transportation: Flight Number: F3786167, from Charlotte to Ithaca, Departure Time: 21:42, Arrival Time: 23:26
 Breakfast: Subway, Charlotte
 Attraction: Books Monument, Charlotte.
@@ -141,8 +141,8 @@ REACT_PLANNER_INSTRUCTION = """You are a proficient planner. Based on the provid
 (1) CostEnquiry[Sub Plan]: This function calculates the cost of a detailed sub plan, which you need to input the people number and plan in JSON format. The sub plan should encompass a complete one-day plan. An example will be provided for reference.
 (2) Finish[Final Plan]: Use this function to indicate the completion of the task. You must submit a final, complete plan as an argument.
 ***** Example *****
-Query: Could you create a challenging travel plan for 7 people from Roanoke to Illinois spanning a week, from March 8th to March 14th, 2022, with a budget of $30,200? The preference is for an entire room, and we would not be taking any flights. In terms of cuisine, we are interested in sampling some Italian and Chinese food.
-You can call CostEuquiry like CostEuquiry[{{"people_number": 7,"day": 1,"current_city": "from Ithaca to Charlotte","transportation": "Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46","breakfast": "Nagaland's Kitchen, Charlotte","attraction": "The Charlotte Museum of History, Charlotte","lunch": "Cafe Maple Street, Charlotte","dinner": "Bombay Vada Pav, Charlotte","accommodation": "Affordable Spacious Refurbished Room in Bushwick!, Charlotte"}}]
+Query: Could you create a travel plan for 7 people from Ithaca to Charlotte spanning 3 days, from March 8th to March 14th, 2022, with a budget of $30,200?
+You can call CostEnquiry like CostEnquiry[{{"people_number": 7,"day": 1,"current_city": "from Ithaca to Charlotte","transportation": "Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46","breakfast": "Nagaland's Kitchen, Charlotte","attraction": "The Charlotte Museum of History, Charlotte","lunch": "Cafe Maple Street, Charlotte","dinner": "Bombay Vada Pav, Charlotte","accommodation": "Affordable Spacious Refurbished Room in Bushwick!, Charlotte"}}]
 You can call Finish like Finish[Day: 1
 Current City: from Ithaca to Charlotte
 Transportation: Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46
@@ -190,8 +190,8 @@ REACT_REFLECT_PLANNER_INSTRUCTION = """You are a proficient planner. Based on th
 (1) CostEnquiry[Sub Plan]: This function calculates the cost of a detailed sub plan, which you need to input the people number and plan in JSON format. The sub plan should encompass a complete one-day plan. An example will be provided for reference.
 (2) Finish[Final Plan]: Use this function to indicate the completion of the task. You must submit a final, complete plan as an argument.
 ***** Example *****
-Query: Could you create a challenging travel plan for 7 people from Roanoke to Illinois spanning a week, from March 8th to March 14th, 2022, with a budget of $30,200? The preference is for an entire room, and we would not be taking any flights. In terms of cuisine, we are interested in sampling some Italian and Chinese food.
-You can call CostEuquiry like CostEuquiry[{{"people_number": 7,"day": 1,"current_city": "from Ithaca to Charlotte","transportation": "Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46","breakfast": "Nagaland's Kitchen, Charlotte","attraction": "The Charlotte Museum of History, Charlotte","lunch": "Cafe Maple Street, Charlotte","dinner": "Bombay Vada Pav, Charlotte","accommodation": "Affordable Spacious Refurbished Room in Bushwick!, Charlotte"}}]
+Query: Could you create a travel plan for 7 people from Ithaca to Charlotte spanning 3 days, from March 8th to March 14th, 2022, with a budget of $30,200?
+You can call CostEnquiry like CostEnquiry[{{"people_number": 7,"day": 1,"current_city": "from Ithaca to Charlotte","transportation": "Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46","breakfast": "Nagaland's Kitchen, Charlotte","attraction": "The Charlotte Museum of History, Charlotte","lunch": "Cafe Maple Street, Charlotte","dinner": "Bombay Vada Pav, Charlotte","accommodation": "Affordable Spacious Refurbished Room in Bushwick!, Charlotte"}}]
 You can call Finish like Finish[Day: 1
 Current City: from Ithaca to Charlotte
 Transportation: Flight Number: F3633413, from Ithaca to Charlotte, Departure Time: 05:38, Arrival Time: 07:46
