@@ -99,7 +99,7 @@ export OPENAI_API_KEY=YOUR_OPENAI_KEY
 export SET_TYPE=validation
 export STRATEGY=direct
 export TMP_DIR=path/to/tmp/parsed/plan/file
-export SUBMISSION_DIR=path/to/your/submission/file
+export EVALUATION_DIR=path/to/your/evaluation/file
 
 cd postprocess
 python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
@@ -107,8 +107,8 @@ python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $M
 # Then these parsed plans should be stored as the real json formats.
 python element_extraction.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --tmp_dir $TMP_DIR
 
-# Finally, combine these plan files for submission. We also provide a submission example file "example_submission.jsonl" in the postprocess folder.
-python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --submission_file_dir $SUBMISSION_DIR
+# Finally, combine these plan files for evaluation. We also provide a evaluation example file "example_evaluation.jsonl" in the postprocess folder.
+python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --evaluation_file_dir $EVALUATION_DIR
 ```
 
 ## Evaluation
@@ -117,10 +117,10 @@ We support the offline validation set evaluation through the provided evaluation
 
 ```bash
 export SET_TYPE=validation
-export SUBMISSION_FILE_PATH=your/submission/file/path
+export EVALUATION_FILE_PATH=your/evaluation/file/path
 
 cd evaluation
-python eval.py --set_type $SET_TYPE --submission_file_path $SUBMISSION_FILE_PATH
+python eval.py --set_type $SET_TYPE --evaluation_file_path $EVALUATION_FILE_PATH
 ```
 
 ## Load Datasets
