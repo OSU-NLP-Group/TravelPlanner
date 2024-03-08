@@ -56,7 +56,7 @@ export OUTPUT_DIR=path/to/your/output/file
 # We support MODEL in ['gpt-3.5-turbo-X','gpt-4-1106-preview','gemini','mistral-7B-32K','mixtral']
 export MODEL_NAME=MODEL_NAME
 export OPENAI_API_KEY=YOUR_OPENAI_KEY
-# if you do not want to test google model, like gemini, just input "1".
+# if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 # SET_TYPE in ['validation', 'test']
 export SET_TYPE=validation
@@ -77,7 +77,7 @@ export OUTPUT_DIR=path/to/your/output/file
 # We support MODEL in ['gpt-3.5-turbo-X','gpt-4-1106-preview','gemini','mistral-7B-32K','mixtral']
 export MODEL_NAME=MODEL_NAME
 export OPENAI_API_KEY=YOUR_OPENAI_KEY
-# if you do not want to test google model, like gemini, just input "1".
+# if you do not want to test google models, like gemini, just input "1".
 export GOOGLE_API_KEY=YOUR_GOOGLE_KEY
 # SET_TYPE in ['validation', 'test']
 export SET_TYPE=validation
