@@ -123,8 +123,8 @@ class ReactAgent:
             self.llm = ChatOpenAI(temperature=0,
                      max_tokens=256,
                      openai_api_key="EMPTY", 
-                     openai_api_base="http://10.176.40.135:8000/v1", 
-                     model_name="/home/huggingface_models/models--mistralai--Mixtral-8x7B-Instruct-v0.1/snapshots/e0bbb53cee412aba95f3b3fa4fc0265b1a0788b2",
+                     openai_api_base="http://localhost:8501/v1", 
+                     model_name="gpt-3.5-turbo",
                      model_kwargs={"stop": stop_list})
             
         elif react_llm_name in ['ChatGLM3-6B-32K']:

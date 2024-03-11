@@ -78,7 +78,7 @@ class Planner:
             self.llm = ChatOpenAI(temperature=0,
                      max_tokens=4096,
                      openai_api_key="EMPTY", 
-                     openai_api_base="http://10.176.40.135:8000/v1", 
+                     openai_api_base="http://localhost:8501/v1", 
                      model_name="YOUR/MODEL/PATH")
             
         elif model_name in ['gemini']:
