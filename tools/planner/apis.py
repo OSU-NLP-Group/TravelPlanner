@@ -66,7 +66,7 @@ class Planner:
                      openai_api_base="http://localhost:8301/v1", 
                      model_name="gpt-3.5-turbo")
         
-        if model_name in  ['ChatGLM3-6B-32K']:
+        elif model_name in  ['ChatGLM3-6B-32K']:
             self.llm = ChatOpenAI(temperature=0,
                      max_tokens=4096,
                      openai_api_key="EMPTY", 
