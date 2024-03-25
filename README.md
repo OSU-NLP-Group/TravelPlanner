@@ -161,10 +161,10 @@ If our paper or related resources prove valuable to your research, we kindly ask
 <a href="https://github.com/OSU-NLP-Group/TravelPlanner"><img src="https://img.shields.io/github/stars/OSU-NLP-Group/TravelPlanner?style=social&label=TravelPanner" alt="GitHub Stars"></a>
 
 ```
-@article{Xie2024TravelPlanner,
-  author    = {Jian Xie, Kai Zhang, Jiangjie Chen, Tinghui Zhu, Renze Lou, Yuandong Tian, Yanghua Xiao, Yu Su},
-  title     = {TravelPlanner: A Benchmark for Real-World Planning with Language Agents},
-  journal   = {arXiv preprint arXiv: 2402.01622},
-  year      = {2024}
+@article{xie2024travelplanner,
+  title={Travelplanner: A benchmark for real-world planning with language agents},
+  author={Xie, Jian and Zhang, Kai and Chen, Jiangjie and Zhu, Tinghui and Lou, Renze and Tian, Yuandong and Xiao, Yanghua and Su, Yu},
+  journal={arXiv preprint arXiv:2402.01622},
+  year={2024}
 }
 ```
