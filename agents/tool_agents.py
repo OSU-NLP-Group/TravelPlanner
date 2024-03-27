@@ -38,7 +38,7 @@ pd.options.display.max_info_columns = 200
 
 os.environ['TIKTOKEN_CACHE_DIR'] = './tmp'
 
-actionMapping = {"FlightSearch":"flights","AttractionSearch":"attractions","GoogleDistanceMatrix":"googleDistanceMatrix","accommodationSearch":"accommodation","RestaurantSearch":"restaurants","Planner":"planner","NotebookWrite":"notebook","CitySearch":"cities"}
+actionMapping = {"FlightSearch":"flights","AttractionSearch":"attractions","GoogleDistanceMatrix":"googleDistanceMatrix","AccommodationSearch":"accommodation","RestaurantSearch":"restaurants","Planner":"planner","NotebookWrite":"notebook","CitySearch":"cities"}
 
 class CityError(Exception):
     pass
@@ -92,7 +92,7 @@ class ReactAgent:
         if 'gpt-3.5' in react_llm_name:
             stop_list = ['\n']
             self.max_token_length = 15000
-            self.llm = ChatOpenAI(temperature=0,
+            self.llm = ChatOpenAI(temperature=1,
                      max_tokens=256,
                      model_name=react_llm_name,
                      openai_api_key=OPENAI_API_KEY,
