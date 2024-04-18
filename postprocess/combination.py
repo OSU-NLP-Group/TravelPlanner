@@ -21,7 +21,9 @@ if __name__ == '__main__':
     elif args.mode == 'sole-planning':
         suffix = f'_{args.strategy}'
 
-    if args.set_type == 'validation':
+    if args.set_type == 'train':
+        query_data_list  = load_dataset('osunlp/TravelPlanner','train')['train']
+    elif args.set_type == 'validation':
         query_data_list  = load_dataset('osunlp/TravelPlanner','validation')['validation']
     elif args.set_type == 'test':
         query_data_list  = load_dataset('osunlp/TravelPlanner','test')['test']
@@ -30,10 +32,10 @@ if __name__ == '__main__':
 
     submission_list = []
 
-    for idx in tqdm(idx_number_list[:]):
+    for idx in tqdm(idx_number_list):
         generated_plan = json.load(open(f'{args.output_dir}/{args.set_type}/generated_plan_{idx}.json'))
         plan = generated_plan[-1][f'{args.model_name}{suffix}_{args.mode}_parsed_results']
-        submission_list.append({"idx":idx,"query":query_data_list[idx]['query'],"plan":plan})
+        submission_list.append({"idx":idx,"query":query_data_list[idx-1]['query'],"plan":plan})
     
     with open(f'{args.submission_file_dir}/{args.set_type}_{args.model_name}{suffix}_{args.mode}_submission.jsonl','w',encoding='utf-8') as w:
         for unit in submission_list:

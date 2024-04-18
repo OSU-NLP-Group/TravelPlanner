@@ -269,7 +269,9 @@ def build_plan_format_conversion_prompt(directory, set_type='validation',model_n
     }}]
 -----EXAMPLE END-----
 """
-    if set_type == 'validation':
+    if set_type == 'train':
+        query_data_list  = load_dataset('osunlp/TravelPlanner','train')['train']
+    elif set_type == 'validation':
         query_data_list  = load_dataset('osunlp/TravelPlanner','validation')['validation']
     elif set_type == 'test':
         query_data_list  = load_dataset('osunlp/TravelPlanner','test')['test']
