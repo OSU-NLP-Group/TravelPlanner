@@ -50,9 +50,11 @@ def paper_term_mapping(commonsense_constraint_record, hard_constraint_record):
     return remap_commonsense_constraint_record, remap_hard_constraint_record
 
 
-def eval_score(validation_or_test: str, file_path: str):
+def eval_score(set_type: str, file_path: str):
 
-    if validation_or_test == 'validation':
+    if set_type == 'train':
+        query_data_list  = load_dataset('osunlp/TravelPlanner','train',download_mode="force_redownload")['train']
+    if set_type == 'validation':
         query_data_list  = load_dataset('osunlp/TravelPlanner','validation',download_mode="force_redownload")['validation']
 
     
@@ -177,7 +179,15 @@ def eval_score(validation_or_test: str, file_path: str):
 
     remap_commonsense_constraint_record, remap_hard_constraint_record = paper_term_mapping(commonsenseConstraint_statistic_processed, hardConstraint_statistic_processed)
 
-    if validation_or_test == 'validation':
+    if set_type == 'train':
+        result['Delivery Rate'] = delivery_cnt / 45
+        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 360
+        result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 45
+        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 105
+        result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 45
+        result['Final Pass Rate'] = final_all_cnt / 45
+
+    elif set_type == 'validation':
         result['Delivery Rate'] = delivery_cnt / 180
         result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 1440
         result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 180
@@ -185,13 +195,14 @@ def eval_score(validation_or_test: str, file_path: str):
         result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 180
         result['Final Pass Rate'] = final_all_cnt / 180
 
-    elif validation_or_test == 'test':
+    elif set_type == 'test':
         result['Delivery Rate'] = delivery_cnt / 1000
         result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 8000
         result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 1000
         result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 2290
         result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 1000
         result['Final Pass Rate'] = final_all_cnt / 1000
+    
 
     return result, {"Commonsense Constraint":remap_commonsense_constraint_record, "Hard Constraint":remap_hard_constraint_record}
 

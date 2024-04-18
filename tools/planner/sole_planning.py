@@ -67,7 +67,9 @@ if __name__ == "__main__":
     parser.add_argument("--strategy", type=str, default="direct")
     args = parser.parse_args()
     directory = f'{args.output_dir}/{args.set_type}'
-    if args.set_type == 'validation':
+    if args.set_type == 'train':
+        query_data_list  = load_dataset('osunlp/TravelPlanner','train')['train']
+    elif args.set_type == 'validation':
         query_data_list  = load_dataset('osunlp/TravelPlanner','validation')['validation']
     elif args.set_type == 'test':
         query_data_list  = load_dataset('osunlp/TravelPlanner','test')['test']
