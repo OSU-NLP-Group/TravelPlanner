@@ -22,6 +22,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 [<a href="https://huggingface.co/spaces/osunlp/TravelPlannerEnvironment">Environment</a>] •
 [<a href="https://twitter.com/ysu_nlp/status/1754365367294562680">Twitter</a>]
 </p>
+
 ## Updates
 
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
