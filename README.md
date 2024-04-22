@@ -100,6 +100,7 @@ export MODEL_NAME=MODEL_NAME
 export OPENAI_API_KEY=YOUR_OPENAI_KEY
 export SET_TYPE=validation
 export STRATEGY=direct
+# MODE in ['two-stage','sole-planning']
 export MODE=two-stage
 export TMP_DIR=path/to/tmp/parsed/plan/file
 export SUBMISSION_DIR=path/to/your/evaluation/file
