@@ -141,7 +141,7 @@ def is_valid_room_rule(question, tested_data):
             if len(res) > 0:
                 if question['local_constraint']['house rule'] == 'smoking' and 'No smoking' in str(res['house_rules'].values[0]):
                     return False, f"The house rule should be {question['local_constraint']['house rule']}."
-                if question['local_constraint']['house rule'] == 'parities' and 'No parties' in str(res['house_rules'].values[0]):
+                if question['local_constraint']['house rule'] == 'parties' and 'No parties' in str(res['house_rules'].values[0]):
                     return False, f"The house rule should be {question['local_constraint']['house rule']}."
                 if question['local_constraint']['house rule'] == 'children under 10' and 'No children under 10' in str(res['house_rules'].values[0]):
                     return False, f"The house rule should be {question['local_constraint']['house rule']}."
