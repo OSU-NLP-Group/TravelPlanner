@@ -25,6 +25,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 
 ## Updates
 
+- 2024/4/28: Update the [warnings](## ⚠️Warnings), please note that we strictly prohibit any form of cheating.
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
 
 # TravelPlanner
@@ -126,6 +127,17 @@ export EVALUATION_FILE_PATH=your/evaluation/file/path
 cd evaluation
 python eval.py --set_type $SET_TYPE --evaluation_file_path $EVALUATION_FILE_PATH
 ```
+
+## ⚠️Warnings
+
+We release our evaluation scripts to foster innovation and aid the development of new methods.  We encourage the use of evaluation feedback in training set, such as implementing reinforcement learning techniques, to enhance learning. However, we strictly prohibit any form of cheating in the validation and test sets to uphold the fairness and reliability of the benchmark's evaluation process. We reserve the right to disqualify results if we find any of the following violations:
+
+1. Reverse engineering of our dataset, which includes, but is not limited to:
+   - Converting our natural language queries in the test set to structured formats (e.g., JSON) for optimization and unauthorized evaluation.
+   - Deriving data point entries using the hard rules from our data construction process, without accessing the actual database.
+   - Other similar manipulations.
+2. Hard coding or explicitly writing evaluation cues into prompts by hand, such as direct hints of common sense, which contradicts our goals as it lacks generalizability and is limited to this specific benchmark.
+3. Any other human interference strategies that are tailored specifically to this benchmark but lack generalization capabilities.
 
 ## Load Datasets
 
