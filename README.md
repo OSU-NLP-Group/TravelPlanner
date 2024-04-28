@@ -25,7 +25,6 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 
 ## Updates
 
-- 2024/4/28: Update the [warnings](## ⚠️Warnings), please note that we strictly prohibit any form of cheating.
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
 
 # TravelPlanner
