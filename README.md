@@ -138,6 +138,7 @@ We release our evaluation scripts to foster innovation and aid the development o
    - Other similar manipulations.
 2. Hard coding or explicitly writing evaluation cues into prompts by hand, such as direct hints of common sense, which contradicts our goals as it lacks generalizability and is limited to this specific benchmark.
 3. Any other human interference strategies that are tailored specifically to this benchmark but lack generalization capabilities.
+
 (The content above is intended solely for use within the TravelPlanner evaluation framework. Extending and editing our database to create new tasks or benchmarks is permitted, provided that you adhere to the licensing terms.)
 
 ## Load Datasets
