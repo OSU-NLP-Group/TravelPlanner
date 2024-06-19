@@ -15,7 +15,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 ![Demo Video GIF](images/TravelPlanner.gif)
 
 <p align="center">
-[<a href="https://osu-nlp-group.github.io/TravelPlanner/">Website</a>]•
+[<a href="https://osu-nlp-group.github.io/TravelPlanner/">Website</a>] •
 [<a href="http://arxiv.org/abs/2402.01622">Paper</a>] •
 [<a href="https://huggingface.co/datasets/osunlp/TravelPlanner">Dataset</a>] •
 [<a href="https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard">Leaderboard</a>] •
