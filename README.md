@@ -149,22 +149,6 @@ from datasets import load_dataset
 data = load_dataset('osunlp/TravelPlanner','test')['test']
 ```
 
-## TODO
-
-- ##### Code
-
-  - [x] Baseline Code
-
-  - [x] Query Construction Code
-
-  - [x] Evaluation Code
-  - [x] Plan Parsing and Element Extraction Code
-
-- ##### Environment
-
-  - [x] Release Environment Database
-  - [ ] Database Field Introduction
-
 ## Contact
 
 If you have any problems, please contact 
