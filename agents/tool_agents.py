@@ -499,9 +499,12 @@ class ReactAgent:
         tools_map = {}
         for tool_name in tools:
             module = importlib.import_module("tools.{}.apis".format(tool_name))
-            tools_map[tool_name] = getattr(module, tool_name[0].upper()+tool_name[1:])()
+            
+            # Avoid instantiating the planner tool twice 
             if tool_name == 'planner' and planner_model_name is not None:
                 tools_map[tool_name] = getattr(module, tool_name[0].upper()+tool_name[1:])(model_name=planner_model_name)
+            else:
+                tools_map[tool_name] = getattr(module, tool_name[0].upper()+tool_name[1:])()
         return tools_map
 
     def load_city(self, city_set_path: str) -> List[str]:

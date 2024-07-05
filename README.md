@@ -39,7 +39,7 @@ For constraints, from the perspective of real world applications, TravelPlanner 
 
 ## Setup Environment
 
-1. Create a conda environment and install dependency:
+1. Create a conda environment and install dependencies:
 ```bash
 conda create -n travelplanner python=3.9
 conda activate travelplanner
@@ -51,8 +51,8 @@ pip install -r requirements.txt
 ## Running
 ### Two-stage Mode
 
-In the two-stage mode, language agents are tasked to with employing various search tools to gather information.
-Based on the collected information, language agents are expected to deliver a plan that not only meet the user’s needs specified in the query but also adheres to commonsense constraints.
+In the two-stage mode, language agents are tasked with employing various search tools to gather information.
+Based on the collected information, language agents are expected to deliver a plan that not only meets the user’s needs specified in the query but also adheres to commonsense constraints.
 
 ```bash
 export OUTPUT_DIR=path/to/your/output/file
@@ -73,7 +73,7 @@ The generated plan will be stored in OUTPUT_DIR/SET_TYPE.
 TravelPlanner also provides an easier mode solely focused on testing their planning ability.
 The sole-planning mode ensures that no crucial information is missed, thereby enabling agents to focus on planning itself.
 
-Please refer to paper for more details.
+Please refer to the paper for more details.
 
 ```bash
 export OUTPUT_DIR=path/to/your/output/file
@@ -118,7 +118,7 @@ python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name
 
 ## Evaluation
 
-We support the offline validation set evaluation through the provided evaluation script. To avoid data contamination, please use our official [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard) for test set evaluation.
+We support the offline validation set evaluation using the provided evaluation script. To avoid data contamination, please use our official [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard) for test set evaluation.
 
 ```bash
 export SET_TYPE=validation
@@ -145,7 +145,7 @@ We release our evaluation scripts to foster innovation and aid the development o
 
 ```python
 from datasets import load_dataset
-# test can be substituted by "train" and "validation".
+# "test" can be substituted by "train" or "validation".
 data = load_dataset('osunlp/TravelPlanner','test')['test']
 ```
 
