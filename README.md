@@ -164,12 +164,9 @@ If our paper or related resources prove valuable to your research, we kindly ask
 <a href="https://github.com/OSU-NLP-Group/TravelPlanner"><img src="https://img.shields.io/github/stars/OSU-NLP-Group/TravelPlanner?style=social&label=TravelPanner" alt="GitHub Stars"></a>
 
 ```
-@inproceedings{
-xie2024travelplanner,
-title={TravelPlanner: A Benchmark for Real-World Planning with Language Agents},
-author={Jian Xie and Kai Zhang and Jiangjie Chen and Tinghui Zhu and Renze Lou and Yuandong Tian and Yanghua Xiao and Yu Su},
-booktitle={Forty-first International Conference on Machine Learning},
-year={2024},
-url={https://openreview.net/forum?id=l5XQzNkAOe}
+@inproceedings{xie2024travelplanner,
+  title={TravelPlanner: A Benchmark for Real-World Planning with Language Agents},
+  author={Xie, Jian and Zhang, Kai and Chen, Jiangjie and Zhu, Tinghui and Lou, Renze and Tian, Yuandong and Xiao, Yanghua and Su, Yu},
+  booktitle={Forty-first International Conference on Machine Learning}
 }
 ```
