@@ -33,4 +33,4 @@ if __name__ == '__main__':
                                            user_input=prompt, model_name='gpt-4-1106-preview', temperature=0)
         total_price += price
         
-    print(f"Parsing Cost:${price}")
+    print(f"Parsing Cost:${total_price}")
