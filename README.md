@@ -159,6 +159,16 @@ We fine-tune **Llama3.1-8B-Instruct** and **Qwen2-7B-Instruct** on TravelPlanner
 - **[Llama-3.1-8B-Instruct-travelplanner-SFT](https://huggingface.co/hsaest/Llama-3.1-8B-Instruct-travelplanner-SFT)**
 - **[Qwen2-7B-Instruct-travelplanner-SFT](https://huggingface.co/hsaest/Qwen2-7B-Instruct-travelplanner-SFT)**
 
+|                    | Commonsense (Micro) | Commonsense (Macro) | Hard (Micro) | Hard (Macro) | Final Pass Rate |
+|--------------------|:-------------------:|:-------------------:|:------------:|:------------:|:---------------:|
+| **Direct Prompting**|                     |                     |              |              |                 |
+| Llama3.1-8B        |        60.1          |         0.0          |      7.9     |      2.8     |       0.0       |
+| Qwen2-72B          |        74.8          |        11.7          |     23.8     |      8.9     |       1.7       |
+| **Fine-tuning** |           |                     |              |              |                 |
+| Llama3.1-8B        |        78.3          |        17.8          |     19.3     |      6.1     |       3.8       |
+| Qwen2-7B           |        59.0          |         0.6          |      0.2     |      0.0     |       0.0       |
+
+
 ## Contact
 
 If you have any problems, please contact 
