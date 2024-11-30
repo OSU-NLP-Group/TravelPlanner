@@ -154,7 +154,7 @@ data = load_dataset('osunlp/TravelPlanner','test')['test']
 
 ## Model Release
 
-We fine-tune **Llama3.1-8B-Instruct** and **Qwen2-7B-Instruct** on TravelPlanner. The fine-tuned model weights are available on the HuggingFace 🤗.
+We fine-tune **Llama3.1-8B-Instruct** and **Qwen2-7B-Instruct** on TravelPlanner ('sole-planning' mode). The fine-tuned model weights are available on the HuggingFace 🤗.
 
 - **[Llama-3.1-8B-Instruct-travelplanner-SFT](https://huggingface.co/hsaest/Llama-3.1-8B-Instruct-travelplanner-SFT)**
 - **[Qwen2-7B-Instruct-travelplanner-SFT](https://huggingface.co/hsaest/Qwen2-7B-Instruct-travelplanner-SFT)**
