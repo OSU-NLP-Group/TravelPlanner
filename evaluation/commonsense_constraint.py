@@ -125,7 +125,7 @@ def is_valid_city_sequence(city_list):
 
 
 
-def is_reasonalbe_visiting_city(question, tested_data):
+def is_reasonable_visiting_city(question, tested_data):
 
     city_list = []
     
@@ -520,7 +520,7 @@ def is_not_absent(question, tested_data):
 
 def evaluation(query_data, tested_data):
     return_info = {}
-    return_info['is_reasonalbe_visiting_city'] = is_reasonalbe_visiting_city(query_data, tested_data)
+    return_info['is_reasonable_visiting_city'] = is_reasonable_visiting_city(query_data, tested_data)
     return_info['is_valid_restaurants'] = is_valid_restaurants(query_data, tested_data)
     return_info['is_valid_attractions'] = is_valid_attractions(query_data, tested_data)
     return_info['is_valid_accommodation'] = is_valid_accommodaton(query_data, tested_data)
@@ -532,7 +532,7 @@ def evaluation(query_data, tested_data):
 
 def boolean_evaluation(query_data, tested_data):
     return_info = {}
-    return_info['is_reasonalbe_visiting_city'] = is_reasonalbe_visiting_city(query_data, tested_data)
+    return_info['is_reasonable_visiting_city'] = is_reasonable_visiting_city(query_data, tested_data)
     return_info['is_valid_restaurants'] = is_valid_restaurants(query_data, tested_data)
     return_info['is_valid_accommodation'] = is_valid_accommodaton(query_data, tested_data)
     return_info['is_valid_attractions'] = is_valid_attractions(query_data, tested_data)
