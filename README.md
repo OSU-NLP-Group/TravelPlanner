@@ -26,7 +26,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 
 ## Updates
 
-- 2024/10/23: Release the [models](https://github.com/OSU-NLP-Group/TravelPlanner/blob/main/README.md#model-release) finetuned on TravelPlanner. The data could be found [here](./finetuning_data). We use [LLama-Factory](https://github.com/hiyouga/LLaMA-Factory) for fine-tuning.
+- 2024/10/23: Release the [models](https://github.com/OSU-NLP-Group/TravelPlanner/blob/main/README.md#model-release) finetuned on TravelPlanner. The data could be found [here](./finetuning_data). We use [LLama-Factory]([https://github.com/hiyouga/LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory/blob/main/examples/train_lora/llama3_lora_sft.sh)) for fine-tuning.
 - 2024/7/14: Support [reference information](./database) in JSON format.
 - 2024/4/28: Update the [warnings](https://github.com/OSU-NLP-Group/TravelPlanner/tree/main?tab=readme-ov-file#%EF%B8%8Fwarnings), please note that we strictly prohibit any form of cheating.
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
