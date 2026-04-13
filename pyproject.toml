@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "travelplanner"
+version = "0.1.0"
+description = "A Benchmark for Real-World Planning with Language Agents"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+    {name = "OSU NLP Group"}
+]
+keywords = ["planning", "language-agents", "tool-use", "benchmark", "nlp"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "langchain==0.1.4",
+    "pandas>=2.0.1",
+    "tiktoken==0.4.0",
+    "openai==0.27.2",
+    "langchain_google_genai==0.0.4",
+    "gradio==3.50.2",
+    "datasets==2.15.0",
+    "func_timeout==4.3.5",
+    "huggingface-hub<1.0.0",  # Required for datasets compatibility
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://osu-nlp-group.github.io/TravelPlanner/"
+Repository = "https://github.com/OSU-NLP-Group/TravelPlanner"
+Paper = "http://arxiv.org/abs/2402.01622"
+Dataset = "https://huggingface.co/datasets/osunlp/TravelPlanner"
+
+[project.scripts]
+# Evaluation
+tp-eval = "evaluation.eval:main"
+# Postprocessing pipeline
+tp-parse = "postprocess.parsing:main"
+tp-extract = "postprocess.element_extraction:main"
+tp-combine = "postprocess.combination:main"
+tp-format-check = "postprocess.format_check:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["agents", "evaluation", "postprocess", "tools", "utils"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
