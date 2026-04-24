@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     for idx in tqdm(idx_number_list):
         generated_plan = json.load(open(f'{args.output_dir}/{args.set_type}/generated_plan_{idx}.json'))
-        plan = generated_plan[-1][f'{args.model_name}{suffix}_{args.mode}_parsed_results']
+        plan = generated_plan[-1].get(f'{args.model_name}{suffix}_{args.mode}_parsed_results', None)
         submission_list.append({"idx":idx,"query":query_data_list[idx-1]['query'],"plan":plan})
     
     with open(f'{args.submission_file_dir}/{args.set_type}_{args.model_name}{suffix}_{args.mode}_submission.jsonl','w',encoding='utf-8') as w:
