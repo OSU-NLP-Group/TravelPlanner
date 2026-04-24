@@ -1,20 +1,19 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "..")))
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from agents.prompts import planner_agent_prompt, cot_planner_agent_prompt, react_planner_agent_prompt,reflect_prompt,react_reflect_planner_agent_prompt, REFLECTION_HEADER
-from langchain.chat_models import ChatOpenAI
-from langchain.llms.base import BaseLLM
-from langchain.schema import (
-    AIMessage,
-    HumanMessage,
-    SystemMessage
-)
+from langchain_community.chat_models import ChatOpenAI
+from langchain_core.messages import HumanMessage
 from env import ReactEnv,ReactReflectEnv
 import tiktoken
 import re
 import openai
 import time
+try:
+    import torch
+except ImportError:
+    pass
 from enum import Enum
 from typing import List, Union, Literal
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -52,6 +51,7 @@ class Planner:
                  # args,
                  agent_prompt: PromptTemplate = planner_agent_prompt,
                  model_name: str = 'gpt-3.5-turbo-1106',
+                 shared_llm=None,
                  ) -> None:
 
         self.agent_prompt = agent_prompt
@@ -59,7 +59,11 @@ class Planner:
         self.model_name = model_name
         self.enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
-        if model_name in  ['mistral-7B-32K']:
+        if shared_llm is not None:
+            # reuse already-loaded model, no double loading
+            self.llm = shared_llm
+
+        elif model_name in  ['mistral-7B-32K']:
             self.llm = ChatOpenAI(temperature=0,
                      max_tokens=4096,
                      openai_api_key="EMPTY", 
@@ -83,6 +87,15 @@ class Planner:
             
         elif model_name in ['gemini']:
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
+        elif model_name in ['gpt-5.4-mini']:
+            from langchain_openai import AzureChatOpenAI
+            self.llm = AzureChatOpenAI(
+                max_tokens=4096,
+                azure_deployment=os.environ['AZURE_OPENAI_DEPLOYMENT'],
+                azure_endpoint=os.environ['AZURE_OPENAI_ENDPOINT'],
+                api_key=os.environ['AZURE_OPENAI_API_KEY'],
+                api_version=os.environ.get('AZURE_OPENAI_API_VERSION', '2025-01-01-preview'),
+            )
         else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
@@ -90,11 +103,33 @@ class Planner:
         print(f"PlannerAgent {model_name} loaded.")
 
     def run(self, text, query, log_file=None) -> str:
+        if len(text) > 12000:
+            text = text[:12000] + '\n...[truncated]'
+
         if log_file:
             log_file.write('\n---------------Planner\n'+self._build_agent_prompt(text, query))
         # print(self._build_agent_prompt(text, query))
         if self.model_name in ['gemini']:
             return str(self.llm.invoke(self._build_agent_prompt(text, query)).content)
+        elif self.model_name in ['qwen', 'qwen25-7B']:
+            torch.cuda.empty_cache()
+            prompt = self._build_agent_prompt(text, query)
+            self.planner_prompt_tokens = len(self.enc.encode(prompt))
+            result = str(self.llm.invoke(prompt))
+            self.planner_completion_tokens = len(self.enc.encode(result))
+            return result
+        elif self.model_name in ['gpt-5.4-mini']:
+            prompt = self._build_agent_prompt(text, query)
+            self.planner_prompt_tokens = len(self.enc.encode(prompt))
+            result = self.llm.invoke(prompt)
+            # handle reasoning tokens returning empty content
+            content = result.content
+            if not content and hasattr(result, 'additional_kwargs'):
+                content = result.additional_kwargs.get('reasoning_content', '')
+            if not content:
+                content = str(result)
+            self.planner_completion_tokens = len(self.enc.encode(content))
+            return content
         else:
             if len(self.enc.encode(self._build_agent_prompt(text, query))) > 12000:
                 return 'Max Token Length Exceeded.'
