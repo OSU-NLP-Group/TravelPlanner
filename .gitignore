@@ -1,9 +1,12 @@
+.env
 
-*.pyc
-*.ipynb
-utils/.DS_Store
-database/.DS_Store
-annotation/.DS_Store
-database/flights/clean_Flights_2022.csv
-.DS_Store
+**/.pyc
+**/__pycache__/
+**/.ipynb
+**/.DS_Store
+
+database/**/*.csv
+database/**/*.txt
 agents/tmp/ec7223a39ce59f226a68acc30dc1af2788490e15
+
+evaluation/validation/*.json

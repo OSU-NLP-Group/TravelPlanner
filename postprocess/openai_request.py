@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import openai
 import math
 import sys
@@ -14,8 +16,10 @@ from datasets import load_dataset
 T = TypeVar('T')
 KEY_INDEX = 0
 KEY_POOL =  [
-   os.environ['OPENAI_API_KEY']
+   os.environ.get('OPENAI_API_KEY')
 ]# your key pool
+if not KEY_POOL[0]:
+    raise ValueError("OPENAI_API_KEY is required. Please set it in your .env file.")
 openai.api_key = KEY_POOL[0]
 
 

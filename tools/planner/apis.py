@@ -1,9 +1,11 @@
 import sys
 import os
+from dotenv import load_dotenv
+load_dotenv()
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "..")))
 from langchain.prompts import PromptTemplate
 from agents.prompts import planner_agent_prompt, cot_planner_agent_prompt, react_planner_agent_prompt,reflect_prompt,react_reflect_planner_agent_prompt, REFLECTION_HEADER
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI, ChatOllama
 from langchain.llms.base import BaseLLM
 from langchain.schema import (
     AIMessage,
@@ -21,8 +23,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import argparse
 
 
-OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
-GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
 
 
 def catch_openai_api_error():
@@ -80,14 +82,32 @@ class Planner:
                      openai_api_key="EMPTY", 
                      openai_api_base="http://localhost:8501/v1", 
                      model_name="YOUR/MODEL/PATH")
-            
+        elif model_name.startswith('ollama:'):
+            # Use local Ollama models via LangChain's ChatOllama wrapper.
+            # Example: --model_name ollama:llama3
+            ollama_model = model_name.split(":", 1)[1] or "llama3"
+            self.llm = ChatOllama(
+                model=ollama_model,
+                temperature=0,
+            )
         elif model_name in ['gemini']:
+            if not GOOGLE_API_KEY:
+                raise ValueError("GOOGLE_API_KEY is required when using 'gemini' model. Please set it in your .env file.")
             self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
         else:
+            if not OPENAI_API_KEY:
+                raise ValueError("OPENAI_API_KEY is required when using OpenAI models. Please set it in your .env file.")
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
 
 
-        print(f"PlannerAgent {model_name} loaded.")
+        # Debug logging to make routing explicit when debugging backends.
+        try:
+            backend_name = type(self.llm).__name__
+            extra = getattr(self.llm, "model", None)
+        except Exception:
+            backend_name = str(type(self.llm))
+            extra = None
+        print(f"[Planner] LLM backend loaded: {backend_name} (model_name={model_name}, extra={extra})")
 
     def run(self, text, query, log_file=None) -> str:
         if log_file:
@@ -117,7 +137,21 @@ class ReactPlanner:
                  ) -> None:
         
         self.agent_prompt = agent_prompt
-        self.react_llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=1024, openai_api_key=OPENAI_API_KEY,model_kwargs={"stop": ["Action","Thought","Observation"]})
+        # Support both OpenAI-hosted and local Ollama models.
+        if model_name.startswith('ollama:'):
+            ollama_model = model_name.split(":", 1)[1] or "llama3"
+            self.react_llm = ChatOllama(
+                model=ollama_model,
+                temperature=0,
+            )
+        else:
+            self.react_llm = ChatOpenAI(
+                model_name=model_name,
+                temperature=0,
+                max_tokens=1024,
+                openai_api_key=OPENAI_API_KEY,
+                model_kwargs={"stop": ["Action", "Thought", "Observation"]},
+            )
         self.env = ReactEnv()
         self.query = None
         self.max_steps = 30
@@ -224,10 +258,25 @@ class ReactReflectPlanner:
         
         self.agent_prompt = agent_prompt
         self.reflect_prompt = reflect_prompt
-        if model_name in ['gemini']:
+        if model_name.startswith('ollama:'):
+            # Use the same local Ollama model for both react and reflection LLMs.
+            ollama_model = model_name.split(":", 1)[1] or "llama3"
+            self.react_llm = ChatOllama(
+                model=ollama_model,
+                temperature=0,
+            )
+            self.reflect_llm = ChatOllama(
+                model=ollama_model,
+                temperature=0,
+            )
+        elif model_name in ['gemini']:
+            if not GOOGLE_API_KEY:
+                raise ValueError("GOOGLE_API_KEY is required when using 'gemini' model. Please set it in your .env file.")
             self.react_llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
             self.reflect_llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
         else:
+            if not OPENAI_API_KEY:
+                raise ValueError("OPENAI_API_KEY is required when using OpenAI models. Please set it in your .env file.")
             self.react_llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=1024, openai_api_key=OPENAI_API_KEY,model_kwargs={"stop": ["Action","Thought","Observation,'\n"]})
             self.reflect_llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=1024, openai_api_key=OPENAI_API_KEY,model_kwargs={"stop": ["Action","Thought","Observation,'\n"]})
         self.model_name = model_name

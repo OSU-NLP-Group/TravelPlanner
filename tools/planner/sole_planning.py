@@ -7,7 +7,7 @@ from agents.prompts import planner_agent_prompt, cot_planner_agent_prompt, react
 # from utils.func import get_valid_name_city,extract_before_parenthesis, extract_numbers_from_filenames
 import json
 import time
-from langchain.callbacks import get_openai_callback
+from langchain_community.callbacks import get_openai_callback
 
 from tqdm import tqdm
 from tools.planner.apis import Planner, ReactPlanner, ReactReflectPlanner
