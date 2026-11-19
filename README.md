@@ -133,10 +133,12 @@ python eval.py --set_type $SET_TYPE --evaluation_file_path $EVALUATION_FILE_PATH
 
 ## ⚠️Warnings
 
+**Official structured test annotations (2026-11-18).** We have publicly released the official structured query annotations for all 1,000 test instances in [`osunlp/TravelPlanner`](https://huggingface.co/datasets/osunlp/TravelPlanner) ([release](https://huggingface.co/datasets/osunlp/TravelPlanner/commit/6b5c204f8afec19c2283cec9ad8f6616748a9c92)), including `visiting_city_number`, `people_number`, `local_constraint`, and `budget`. Using these officially released annotations as inputs to planning or repair is not considered reverse engineering under the restrictions below. When reporting results, specify whether structured annotations were used and identify the dataset revision, so the input setting is clear when comparing against results using natural language queries. Official test-set evaluation should continue to use the [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard); this release does not change its submission or evaluation rules.
+
 We release our evaluation scripts to foster innovation and aid the development of new methods.  We encourage the use of evaluation feedback in training set, such as implementing reinforcement learning techniques, to enhance learning. However, we strictly prohibit any form of cheating in the validation and test sets to uphold the fairness and reliability of the benchmark's evaluation process. We reserve the right to disqualify results if we find any of the following violations:
 
 1. Reverse engineering of our dataset, which includes, but is not limited to:
-   - Converting our natural language queries in the test set to structured formats (e.g., JSON) for optimization and unauthorized evaluation.
+   - Reconstructing non-public dataset information or evaluation annotations for optimization or unauthorized evaluation.
    - Deriving data point entries using the hard rules from our data construction process, without accessing the actual database.
    - Other similar manipulations.
 2. Hard coding or explicitly writing evaluation cues into prompts by hand, such as direct hints of common sense, which contradicts our goals as it lacks generalizability and is limited to this specific benchmark.
@@ -190,3 +192,4 @@ If our paper or related resources prove valuable to your research, we kindly ask
   year={2024}
 }
 ```
+
