@@ -56,6 +56,8 @@ def eval_score(set_type: str, file_path: str):
         query_data_list  = load_dataset('osunlp/TravelPlanner','train',download_mode="force_redownload")['train']
     elif set_type == 'validation':
         query_data_list  = load_dataset('osunlp/TravelPlanner','validation',download_mode="force_redownload")['validation']
+    elif set_type == 'test':
+        query_data_list  = load_dataset('osunlp/TravelPlanner','test',download_mode="force_redownload")['test']
 
     
     query_data_list = [x for x in query_data_list]
