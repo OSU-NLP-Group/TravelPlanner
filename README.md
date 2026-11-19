@@ -26,9 +26,9 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 
 ## Updates
 
+- 2026/11/18: Release the [official structured query annotations](https://huggingface.co/datasets/osunlp/TravelPlanner) for all 1,000 test instances ([release](https://huggingface.co/datasets/osunlp/TravelPlanner/commit/6b5c204f8afec19c2283cec9ad8f6616748a9c92)).
 - 2024/10/23: Release the [models](https://github.com/OSU-NLP-Group/TravelPlanner/blob/main/README.md#model-release) finetuned on TravelPlanner. The data could be found [here](./finetuning_data). We use [LLama-Factory](https://github.com/hiyouga/LLaMA-Factory/blob/main/examples/train_lora/llama3_lora_sft.sh) for fine-tuning.
 - 2024/7/14: Support [reference information](./database) in JSON format.
-- 2024/4/28: Update the [warnings](https://github.com/OSU-NLP-Group/TravelPlanner/tree/main?tab=readme-ov-file#%EF%B8%8Fwarnings), please note that we strictly prohibit any form of cheating.
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
 
 # TravelPlanner
@@ -130,21 +130,6 @@ export EVALUATION_FILE_PATH=your/evaluation/file/path
 cd evaluation
 python eval.py --set_type $SET_TYPE --evaluation_file_path $EVALUATION_FILE_PATH
 ```
-
-## ⚠️Warnings
-
-**Official structured test annotations (2026-11-18).** We have publicly released the official structured query annotations for all 1,000 test instances in [`osunlp/TravelPlanner`](https://huggingface.co/datasets/osunlp/TravelPlanner) ([release](https://huggingface.co/datasets/osunlp/TravelPlanner/commit/6b5c204f8afec19c2283cec9ad8f6616748a9c92)), including `visiting_city_number`, `people_number`, `local_constraint`, and `budget`. Using these officially released annotations as inputs to planning or repair is not considered reverse engineering under the restrictions below. When reporting results, specify whether structured annotations were used and identify the dataset revision, so the input setting is clear when comparing against results using natural language queries. Official test-set evaluation should continue to use the [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard); this release does not change its submission or evaluation rules.
-
-We release our evaluation scripts to foster innovation and aid the development of new methods.  We encourage the use of evaluation feedback in training set, such as implementing reinforcement learning techniques, to enhance learning. However, we strictly prohibit any form of cheating in the validation and test sets to uphold the fairness and reliability of the benchmark's evaluation process. We reserve the right to disqualify results if we find any of the following violations:
-
-1. Reverse engineering of our dataset, which includes, but is not limited to:
-   - Reconstructing non-public dataset information or evaluation annotations for optimization or unauthorized evaluation.
-   - Deriving data point entries using the hard rules from our data construction process, without accessing the actual database.
-   - Other similar manipulations.
-2. Hard coding or explicitly writing evaluation cues into prompts by hand, such as direct hints of common sense, which contradicts our goals as it lacks generalizability and is limited to this specific benchmark.
-3. Any other human interference strategies that are tailored specifically to this benchmark but lack generalization capabilities.
-
-(The content above is intended solely for use within the TravelPlanner evaluation framework. Extending and editing our database to create new tasks or benchmarks is permitted, provided that you adhere to the licensing terms.)
 
 ## Load Datasets
 
