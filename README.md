@@ -26,7 +26,7 @@ Code for the Paper "[TravelPlanner: A Benchmark for Real-World Planning with Lan
 
 ## Updates
 
-- 2026/11/18: Release the [official structured query annotations](https://huggingface.co/datasets/osunlp/TravelPlanner) for all 1,000 test instances ([release](https://huggingface.co/datasets/osunlp/TravelPlanner/commit/6b5c204f8afec19c2283cec9ad8f6616748a9c92)).
+- 2026/11/18: Release the [official structured query annotations](https://huggingface.co/datasets/osunlp/TravelPlanner) for all 1,000 test instances ([release](https://huggingface.co/datasets/osunlp/TravelPlanner/commit/6b5c204f8afec19c2283cec9ad8f6616748a9c92)). Support local evaluation on both the validation and test sets; see [Evaluation](#evaluation).
 - 2024/10/23: Release the [models](https://github.com/OSU-NLP-Group/TravelPlanner/blob/main/README.md#model-release) finetuned on TravelPlanner. The data could be found [here](./finetuning_data). We use [LLama-Factory](https://github.com/hiyouga/LLaMA-Factory/blob/main/examples/train_lora/llama3_lora_sft.sh) for fine-tuning.
 - 2024/7/14: Support [reference information](./database) in JSON format.
 - 2024/4/21: Provide [format check tool](./postprocess/format_check.py)  for testset submission files.  You can run it to check if there are any format errors in your file.
@@ -121,9 +121,12 @@ python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name
 
 ## Evaluation
 
-We support the offline validation set evaluation using the provided evaluation script. To avoid data contamination, please use our official [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard) for test set evaluation.
+The provided evaluation script supports local evaluation on both the validation and test sets. Use the official [leaderboard](https://huggingface.co/spaces/osunlp/TravelPlannerLeaderboard) to submit your test-set results.
+
+Prepare a JSONL file with one record per instance in the original dataset order, including `idx`, `query`, and `plan`. Indices start at 1. Include the complete selected split: 180 records for validation or 1,000 records for test. Use `"plan": []` for any unselected or unfinished instance. Empty plans do not count as successful. Final Pass Rate is computed over the full split, with a denominator of 180 for validation or 1,000 for test.
 
 ```bash
+# SET_TYPE in ['validation', 'test']
 export SET_TYPE=validation
 export EVALUATION_FILE_PATH=your/evaluation/file/path
 
