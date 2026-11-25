@@ -1,0 +1,5 @@
+# Minimal dependencies for offline evaluator regression tests.
+pandas>=2.1.0
+pytest>=7
+requests
+tqdm

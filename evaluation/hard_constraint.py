@@ -4,6 +4,7 @@ from tools.accommodations.apis import Accommodations
 from tools.restaurants.apis import Restaurants
 from tools.googleDistanceMatrix.apis import GoogleDistanceMatrix
 from tools.attractions.apis import Attractions
+from evaluation.parsing import extract_from_to, flight_records, matching_records, travel_date
 import math
 import json
 import re
@@ -53,78 +54,65 @@ def convert_bool_values(item):
 
 
 
-def extract_from_to(text: str):
-    """
-    Extracts 'A' and 'B' from the format "from A to B" in the given text, with B ending at a comma or the end of the string.
-    
-    Args:
-    - text (str): The input string.
-    
-    Returns:
-    - tuple: A tuple containing 'A' and 'B'. If no match is found, returns (None, None).
-    """
-    pattern = r"from\s+(.+?)\s+to\s+([^,]+)(?=[,\s]|$)"
-    matches = re.search(pattern, text)
-    return matches.groups() if matches else (None, None)
+def _valid_amount(value, positive=False):
+    try:
+        value = float(value)
+        return math.isfinite(value) and (value > 0 if positive else value >= 0)
+    except (TypeError, ValueError):
+        return False
 
 
 def get_total_cost(question, tested_data):
-    total_cost = 0
-    for i in range(min(question['days'],len(tested_data))):
-        unit = tested_data[i]
-        # transporation 
-        if unit['transportation'] and  unit['transportation'] != '-':
-            value = unit['transportation']
-            org_city, dest_city = extract_from_to(value)
-            if org_city == None or dest_city == None:
-                org_city, dest_city = extract_from_to(unit['current_city'])
-            
-            if org_city == None or dest_city == None:
-                pass
-            else:
-                if 'flight number' in value.lower():
-                    res = flight.data[flight.data['Flight Number'] == value.split('Flight Number: ')[1].split(',')[0]]
-                    if len(res) > 0:
-                        total_cost += res['Price'].values[0] * question['people_number']
-                
-                elif 'self-driving' in value.lower() or 'taxi' in value.lower():
-                    if 'self-driving' in value.lower():
-                        # print(org_city,dest_city)
-                        cost = googleDistanceMatrix.run_for_evaluation(org_city,dest_city,'self-driving')['cost']
-                        total_cost += cost * math.ceil(question['people_number'] * 1.0 / 5)
-                    else:
-                        cost = googleDistanceMatrix.run_for_evaluation(org_city,dest_city,'taxi')['cost']
-                        total_cost += cost * math.ceil(question['people_number'] * 1.0 / 4)
-        
-        # breakfast
-        if unit['breakfast'] and unit['breakfast'] != '-':
-            name, city = get_valid_name_city(unit['breakfast'])
-            res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
-            if len(res) > 0:
-                total_cost += res['Average Cost'].values[0] * question['people_number']
+    """Price all selected services; unresolvable prices return infinity.
 
-            
-        # lunch
-        if unit['lunch'] and unit['lunch'] != '-':
-            name, city = get_valid_name_city(unit['lunch'])
-            res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
-            if len(res) > 0:
-                total_cost += res['Average Cost'].values[0] * question['people_number']
-        
-        # dinner
-        if unit['dinner'] and unit['dinner'] != '-':
-            name, city = get_valid_name_city(unit['dinner'])
-            res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
-            if len(res) > 0:
-                total_cost += res['Average Cost'].values[0] * question['people_number']
-        
-        # accommodation
-        if unit['accommodation'] and unit['accommodation'] != '-':
-            name, city = get_valid_name_city(unit['accommodation'])
-            res = accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)]
-            if len(res) > 0:
-                total_cost += res['price'].values[0] * math.ceil(question['people_number'] * 1.0 / res['maximum occupancy'].values[0])
-    # print(total_cost)
+    This keeps missing/ambiguous database records from silently becoming free
+    services, and lets both public evaluation entry points fail the budget check.
+    """
+    total_cost = 0
+    people = question['people_number']
+    if not _valid_amount(people, positive=True):
+        return math.inf
+    people = float(people)
+    for i, unit in enumerate(tested_data[:question['days']]):
+        value = unit.get('transportation')
+        if value and value != '-':
+            origin, destination = extract_from_to(value)
+            if origin is None or destination is None:
+                origin, destination = extract_from_to(unit.get('current_city'))
+            if origin is None or destination is None:
+                return math.inf
+            if 'flight number' in value.lower():
+                records = flight_records(flight.data, value, origin, destination, travel_date(question, i))
+                if len(records) != 1 or not _valid_amount(records.iloc[0]['Price']):
+                    return math.inf
+                total_cost += float(records.iloc[0]['Price']) * people
+            elif 'self-driving' in value.lower() or 'taxi' in value.lower():
+                mode = 'self-driving' if 'self-driving' in value.lower() else 'taxi'
+                cost = googleDistanceMatrix.run_for_evaluation(origin, destination, mode)['cost']
+                if not _valid_amount(cost):
+                    return math.inf
+                capacity = 5 if mode == 'self-driving' else 4
+                total_cost += float(cost) * math.ceil(people / capacity)
+            else:
+                return math.inf
+
+        for meal in ('breakfast', 'lunch', 'dinner'):
+            value = unit.get(meal)
+            if value and value != '-':
+                records = matching_records(restaurants.data, value, 'Name', 'City')
+                if len(records) != 1 or not _valid_amount(records.iloc[0]['Average Cost']):
+                    return math.inf
+                total_cost += float(records.iloc[0]['Average Cost']) * people
+
+        value = unit.get('accommodation')
+        if value and value != '-':
+            records = matching_records(accommodation.data, value, 'NAME', 'city')
+            if len(records) != 1:
+                return math.inf
+            record = records.iloc[0]
+            if not _valid_amount(record['price']) or not _valid_amount(record['maximum occupancy'], positive=True):
+                return math.inf
+            total_cost += float(record['price']) * math.ceil(people / float(record['maximum occupancy']))
     return total_cost
 
 
@@ -137,7 +125,7 @@ def is_valid_room_rule(question, tested_data):
         unit = tested_data[i]
         if unit['accommodation'] and unit['accommodation'] != '-':
             name, city = get_valid_name_city(unit['accommodation'])
-            res = accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)]
+            res = matching_records(accommodation.data, unit['accommodation'], 'NAME', 'city')
             if len(res) > 0:
                 if question['local_constraint']['house rule'] == 'smoking' and 'No smoking' in str(res['house_rules'].values[0]):
                     return False, f"The house rule should be {question['local_constraint']['house rule']}."
@@ -165,7 +153,7 @@ def is_valid_cuisine(question, tested_data):
                 name, city = get_valid_name_city(unit['breakfast'])
                 if city == question['org']:
                     continue
-                res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
+                res = matching_records(restaurants.data, unit['breakfast'], 'Name', 'City')
                 if len(res) > 0:       
                     for cuisine in question['local_constraint']['cuisine']:
                         if cuisine in res.iloc[0]['Cuisines']:
@@ -175,7 +163,7 @@ def is_valid_cuisine(question, tested_data):
                 name, city = get_valid_name_city(unit['lunch'])
                 if city == question['org']:
                     continue
-                res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
+                res = matching_records(restaurants.data, unit['lunch'], 'Name', 'City')
                 if len(res) > 0:
                     for cuisine in question['local_constraint']['cuisine']:
                         if cuisine in res.iloc[0]['Cuisines']:
@@ -185,7 +173,7 @@ def is_valid_cuisine(question, tested_data):
                 name, city = get_valid_name_city(unit['dinner'])
                 if city == question['org']:
                     continue
-                res = restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]
+                res = matching_records(restaurants.data, unit['dinner'], 'Name', 'City')
                 if len(res) > 0:
                     for cuisine in question['local_constraint']['cuisine']:
                         if cuisine in res.iloc[0]['Cuisines']:
@@ -225,7 +213,7 @@ def is_valid_room_type(question, tested_data):
         unit = tested_data[i]
         if unit['accommodation'] and unit['accommodation'] != '-':
             name, city = get_valid_name_city(unit['accommodation'])
-            res = accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)]
+            res = matching_records(accommodation.data, unit['accommodation'], 'NAME', 'city')
             if len(res) > 0:
                 if question['local_constraint']['room type'] == 'not shared room' and res['room type'].values[0] == 'Shared room':
                     return False, f"The room type should be {question['local_constraint']['room type']}."

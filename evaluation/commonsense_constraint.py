@@ -4,6 +4,10 @@ from tools.accommodations.apis import Accommodations
 from tools.restaurants.apis import Restaurants
 from tools.googleDistanceMatrix.apis import GoogleDistanceMatrix
 from tools.attractions.apis import Attractions
+from evaluation.parsing import (
+    city_route, extract_from_to, flight_records, matching_records,
+    normalize_city, parse_attractions, travel_date,
+)
 import math
 import json
 import re   
@@ -66,97 +70,48 @@ def transportation_match(text: str):
         return 'Flight'
 
 
-def extract_from_to(text: str):
-    """
-    Extracts 'A' and 'B' from the format "from A to B" in the given text, with B ending at a comma or the end of the string.
-    
-    Args:
-    - text (str): The input string.
-    
-    Returns:
-    - tuple: A tuple containing 'A' and 'B'. If no match is found, returns (None, None).
-    """
-    pattern = r"from\s+(.+?)\s+to\s+([^,]+)(?=[,\s]|$)"
-    matches = re.search(pattern, text)
-    return matches.groups() if matches else (None, None)
-
-
-
 def is_valid_city_sequence(city_list):
-    """
-    Checks if the city sequence is valid. A valid sequence has every city (except the first and last) 
-    appearing consecutively, and no city should appear again once its sequence is over.
-    
-    Args:
-    - city_list (list): List of cities.
-    
-    Returns:
-    - bool: True if the sequence is valid, False otherwise.
-    """
-    
-    # If the list has less than 3 cities, it's invalid.
-    if len(city_list) < 3:
+    """A closed route may visit each destination in only one consecutive run."""
+    if len(city_list) < 3 or city_list[0] != city_list[-1]:
         return False
-    
-    # Set to keep track of visited cities
-    visited_cities = set()
-    
-    i = 0
-    while i < len(city_list):
-        city = city_list[i]
-        
-        # If the city was already visited, it's invalid.
-        if city in visited_cities and (i != 0 and i != len(city_list) - 1):
-            return False
-        
-        # Count the consecutive occurrences of the city
-        count = 0
-        while i < len(city_list) and city_list[i] == city:
-            count += 1
-            i += 1
-        
-        # If the city appeared only once in the medium, it's invalid.
-        if count == 1 and 0 < i - 1 < len(city_list) - 1:
-            return False
-        
-        visited_cities.add(city)
-    
-    return True
-
+    runs = count_consecutive_values(city_list)
+    if len(runs) < 3:
+        return False
+    interior = [city for city, _ in runs[1:-1]]
+    return (city_list[0] not in interior and
+            len(interior) == len(set(interior)) and
+            all(count >= 2 for _, count in runs[1:-1]))
 
 
 def is_reasonable_visiting_city(question, tested_data):
+    if not tested_data or len(tested_data) < question['days']:
+        return False, "The route is incomplete."
 
+    origin = normalize_city(question['org'])
+    previous_city = origin
     city_list = []
-    
-    # print(tested_data)
-    for i in range(min(question['days'],len(tested_data))):
-        city_value = tested_data[i]['current_city']
+    for i, unit in enumerate(tested_data[:question['days']]):
+        start, end = city_route(unit.get('current_city'))
+        if start is None or end is None:
+            return False, f"The city in day {i+1} cannot be parsed."
+        if start != previous_city:
+            return False, f"The route in day {i+1} should start in {previous_city}."
+        city_list.extend([start, end] if start != end else [start])
+        previous_city = end
 
-        if 'from' in city_value:
-            city1, city2 = extract_from_to(city_value)
-            city1 = extract_before_parenthesis(city1)
-            city2 = extract_before_parenthesis(city2)
-            if i==0 and  city1 != question['org']:
-                return False, f"The first day's city should be {question['org']}."
-
-            city_list += [city1, city2]
-
-        else:
-            city_list.append(extract_before_parenthesis(city_value))
-    
-    if city_list[0] != city_list[-1]:
-        return False, "The trip should be a closed circle."
-
+    if previous_city != origin:
+        return False, "The trip should return to its origin."
     if not is_valid_city_sequence(city_list):
         return False, "The city sequence is invalid."
-    
-    for idx, city in enumerate(city_list):
+
+    for city in city_list:
         if city not in city_state_map:
             return False, f"{city} is not a valid city."
-        if idx not in [0,len(city_list)-1] and question['days'] >3 and city_state_map[city] != question['dest']:
-            return False, f"{city} is not in {question['dest']}."
-    
+        if city != origin:
+            if question['days'] == 3 and city != normalize_city(question['dest']):
+                return False, f"{city} is not the requested destination."
+            if question['days'] > 3 and city_state_map[city] != question['dest']:
+                return False, f"{city} is not in {question['dest']}."
     return True, None
 
 
@@ -201,9 +156,10 @@ def is_valid_attractions(question, tested_data):
         unit = tested_data[i]
 
         if 'attraction' in unit and unit['attraction'] and unit['attraction'] != '-':
-            for attraction in unit['attraction'].split(';')[:-1]:
-                if attraction not in attractions_list:
-                    attractions_list.append(attraction)
+            for attraction in parse_attractions(unit['attraction']):
+                identity = get_valid_name_city(attraction)
+                if identity not in attractions_list:
+                    attractions_list.append(identity)
                 else:
                     return False, f"The attraction '{attraction}' in day {i+1} is repeated."
                 
@@ -214,7 +170,7 @@ def is_valid_attractions(question, tested_data):
 
 def is_valid_transportation(question, tested_data):
     
-    if tested_data[0]['transportation'] and tested_data[0]['transportation'] != '-':
+    if tested_data and tested_data[0].get('transportation') not in (None, '', '-'):
         transportation_list = [transportation_match(tested_data[0]['transportation'])]
     
     else:
@@ -234,112 +190,41 @@ def is_valid_transportation(question, tested_data):
     return True, None
 
 def is_valid_information_in_current_city(question, tested_data):
-
-    for i in range(min(question['days'],len(tested_data))):
-        unit = tested_data[i]
-        current_city = unit['current_city']
-        final_city_list = []
-
-        if 'from' in current_city:
-            city1, city2 = extract_from_to(current_city)
-            city1 = extract_before_parenthesis(city1)
-            city2 = extract_before_parenthesis(city2)
-            final_city_list = [city1, city2]
-        else:
-            final_city_list = [extract_before_parenthesis(current_city)]
-
-        if 'transportation' in unit and unit['transportation'] and unit['transportation'] != '-':
-            for city in final_city_list:
-                if city not in unit['transportation']:
-                    # print(city)
-                    return False, f"The transportation in day {i+1} is invalid city choice."
-        # elif 'transportation' not in unit:
-        #     return False, f"No Transportation Info."
-        
-        if 'breakfast' in unit and unit['breakfast'] and unit['breakfast'] != '-':
-
-            flag = False
-
-            for city in final_city_list:
-                if city  in unit['breakfast']:
-                    flag = True
-
-            if not flag:
-                return False, f"The breakfast in day {i+1} is invalid city choice."
-        # elif 'breakfast' not in unit:
-        #     return False, f"No Breakfast Info."
-        
-        if 'lunch' in unit and unit['lunch'] and unit['lunch'] != '-':
-            flag = False
-
-            for city in final_city_list:
-                if city  in unit['lunch']:
-                    flag = True
-            
-            if not flag:
-                return False, f"The lunch in day {i+1} is invalid city choice."
-        # elif 'lunch' not in unit:
-        #     return False, f"No Lunch Info."
-            
-        if 'dinner' in unit and unit['dinner'] and unit['dinner'] != '-':
-            flag = False
-
-            for city in final_city_list:
-                if city  in unit['dinner']:
-                    flag = True
-            
-            if not flag:
-                return False, f"The dinner in day {i+1} is invalid city choice."
-        # elif 'dinner' not in unit:
-        #     return False, f"No Dinner Info."
-        
-        if 'attraction' in unit and unit['attraction'] and unit['attraction'] != '-':
-            
-            attraction_list = unit['attraction'].split(';')[:-1]
-
-            for attraction in attraction_list:
-                flag = False
-                for city in final_city_list:
-                    if city  in attraction:
-                        flag = True
-                if not flag:
-                    return False, f"The attraction in day {i+1} is invalid city choice."
-                
-        # elif 'attraction' not in unit:
-        #     return False, f"No Attraction Info."
-            
-            
-        if 'accommodation' in unit and unit['accommodation'] and unit['accommodation'] != '-':
-            
-            if final_city_list[-1] not in unit['accommodation']:
-                return False, f"The accommodation in day {i+1} is invalid city choice."
-            
-        # elif 'accommodation' not in unit:
-        #     return False, f"No Accommodation Info."
-    
+    for i, unit in enumerate(tested_data[:question['days']]):
+        start, end = city_route(unit.get('current_city'))
+        if start is None or end is None:
+            return False, f"The city in day {i+1} cannot be parsed."
+        value = unit.get('transportation')
+        if value and value != '-':
+            if extract_from_to(value) != (start, end):
+                return False, f"The transportation in day {i+1} is invalid city choice."
+        for meal in ('breakfast', 'lunch', 'dinner'):
+            value = unit.get(meal)
+            if value and value != '-' and get_valid_name_city(value)[1] not in (start, end):
+                return False, f"The {meal} in day {i+1} is invalid city choice."
+        for attraction in parse_attractions(unit.get('attraction')):
+            if get_valid_name_city(attraction)[1] not in (start, end):
+                return False, f"The attraction in day {i+1} is invalid city choice."
+        value = unit.get('accommodation')
+        if value and value != '-' and get_valid_name_city(value)[1] != end:
+            return False, f"The accommodation in day {i+1} is invalid city choice."
     return True, None
-        
+
 # hallucination 
 def is_valid_information_in_sandbox(question, tested_data):
     
     for i in range(min(question['days'],len(tested_data))):
         unit = tested_data[i]
         
-        if unit['transportation'] and unit['transportation'] != '-':
+        if unit.get('transportation') and unit['transportation'] != '-':
             value = unit['transportation']
             org_city, dest_city = extract_from_to(value)
             if org_city == None or dest_city == None:
-                org_city, dest_city = extract_from_to(unit['current_city'])
+                org_city, dest_city = extract_from_to(unit.get('current_city'))
             if 'flight number' in value.lower():
-                try:
-                    org_city = extract_before_parenthesis(org_city)
-                    dest_city = extract_before_parenthesis(dest_city)
-                except TypeError:
-                    raise ValueError("The transportation {} in day {} can not be parsed.".format(value,i+1))
-                # print(value)
-                if len(flight.data[(flight.data['Flight Number'] == value.split('Flight Number: ')[1].split(',')[0]) & (flight.data['OriginCityName']==org_city) & (flight.data['DestCityName']==dest_city)]) < 1:
-                     return False, f"The flight number in day {i+1} is invalid in the sandbox."
-            
+                if len(flight_records(flight.data, value, org_city, dest_city, travel_date(question, i))) != 1:
+                    return False, f"The flight number in day {i+1} is invalid in the sandbox."
+
             elif 'self-driving' in value.lower() or 'taxi' in value.lower():
                 try:
                     org_city = extract_before_parenthesis(org_city)
@@ -357,40 +242,33 @@ def is_valid_information_in_sandbox(question, tested_data):
                         return False, f"The taxi in day {i+1} is invalid in the sandbox."
 
         if 'breakfast' in unit and unit['breakfast'] and unit['breakfast'] != '-':
-            name, city = get_valid_name_city(unit['breakfast'])
-            if len(restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]) < 1:
+            if len(matching_records(restaurants.data, unit['breakfast'], 'Name', 'City')) != 1:
                 return False, f"The breakfast in day {i+1} is invalid in the sandbox."
         # elif 'breakfast' not in unit:
         #     return False, f"No Breakfast Info."
         
         if 'lunch' in unit and unit['lunch'] and unit['lunch'] != '-':
-            name, city = get_valid_name_city(unit['lunch'])
-            if len(restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]) < 1:
+            if len(matching_records(restaurants.data, unit['lunch'], 'Name', 'City')) != 1:
                 return False, f"The lunch in day {i+1} is invalid in the sandbox."
         # elif 'lunch' not in unit:
         #     return False, f"No Lunch Info."
         
         if 'dinner' in unit and unit['dinner'] and unit['dinner'] != '-':
-            name, city = get_valid_name_city(unit['dinner'])
-            if len(restaurants.data[(restaurants.data['Name'].astype(str).str.contains(re.escape(name))) & (restaurants.data['City'] == city)]) < 1:
+            if len(matching_records(restaurants.data, unit['dinner'], 'Name', 'City')) != 1:
                 return False, f"The dinner in day {i+1} is invalid in the sandbox."
         # elif 'dinner' not in unit:
         #     return False, f"No Dinner Info."
             
         if 'attraction' in unit and unit['attraction'] and unit['attraction'] != '-':
-            attractions_list = unit['attraction'].split(';')[:-1]
+            attractions_list = parse_attractions(unit['attraction'])
             for attraction in attractions_list:
-                name, city = get_valid_name_city(attraction)
-                if len(attractions.data[(attractions.data['Name'].astype(str).str.contains(re.escape(name))) & (attractions.data['City'] == city)]) < 1:
+                if len(matching_records(attractions.data, attraction, 'Name', 'City')) != 1:
                     return False, f"The attraction {attraction} in day {i+1} is invalid in the sandbox."
         # elif 'attraction' not in unit:
         #     return False, f"No Attraction Info."
                 
         if 'accommodation' in unit and unit['accommodation'] and unit['accommodation'] != '-':
-            name, city = get_valid_name_city(unit['accommodation'])
-            # print(name,city)
-            # print(accommodation.data[accommodation.data['NAME'].astype(str).str.contains(re.escape(name))])
-            if len(accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)]) < 1:
+            if len(matching_records(accommodation.data, unit['accommodation'], 'NAME', 'city')) != 1:
                 return False, f"The accommodation in day {i+1} is invalid in the sandbox."
         # elif 'accommodation' not in unit:
         #     return False, f"No Accommodation Info."
@@ -399,62 +277,49 @@ def is_valid_information_in_sandbox(question, tested_data):
 
 
 def is_valid_accommodaton(question, tested_data):
-    data = []
-    for i in range(min(question['days'],len(tested_data))):
-        unit = tested_data[i]
-
+    # Missing nights break a stay; whitespace and city annotations do not.
+    stays = []
+    for unit in tested_data[:question['days']]:
         if 'accommodation' not in unit:
-            return False, f"No Accommodation Info."
-        
-        data.append(unit['accommodation'])
-    # data = [unit['accommodation'] for unit in tested_data]
-    consectutive_accommodation = count_consecutive_values(data)
-    for unit in consectutive_accommodation:
-        # print(unit)
-        if unit and unit[0] not in  ['-',''] :
-            name, city = get_valid_name_city(unit[0])
-            # print(unit[0],name,city)
-            # try:
-            if len(accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)]) == 1 and unit[1] <  accommodation.data[(accommodation.data['NAME'].astype(str).str.contains(re.escape(name))) & (accommodation.data['city'] == city)].iloc[0]['minimum nights']:
-                return False, f"The accommodation {unit[0]} do not obey the minumum nights rule."
-            # can not parse data
-            # except re.error:
-            #     continue
-            
+            return False, "No Accommodation Info."
+        value = unit['accommodation']
+        if not value or value.strip() in ('', '-'):
+            stays.append(None)
+            continue
+        records = matching_records(accommodation.data, value, 'NAME', 'city')
+        if len(records) != 1:
+            return False, f"The accommodation {value} cannot be uniquely identified."
+        record = records.iloc[0]
+        try:
+            minimum = float(record['minimum nights'])
+        except (TypeError, ValueError):
+            return False, f"The accommodation {value} has invalid minimum nights."
+        if not math.isfinite(minimum) or minimum <= 0:
+            return False, f"The accommodation {value} has invalid minimum nights."
+        stays.append((record['NAME'], record['city'], minimum))
+
+    for stay, nights in count_consecutive_values(stays):
+        if stay is not None and nights < stay[2]:
+            return False, f"The accommodation {stay[0]}, {stay[1]} does not obey the minimum nights rule."
     return True, None
 
+
 def is_valid_visiting_city_number(question, tested_data):
-
     city_set = set()
-    
-
-    for i in range(min(question['days'],len(tested_data))):
-        city_value = tested_data[i]['current_city']
-
-        if 'from' in city_value:
-            city1, city2 = extract_from_to(city_value)
-            city1 = extract_before_parenthesis(city1)
-            city2 = extract_before_parenthesis(city2)
-            if i==0 and  city1 != question['org']:
-                return False, f"The first day's city should be {question['org']}."
-
-            city_set.add(city1)
-            city_set.add(city2)
-
-        else:
-            city_set.add(extract_before_parenthesis(city_value))
-    
-    city_set.discard(question['org'])
-
+    for i, unit in enumerate(tested_data[:question['days']]):
+        start, end = city_route(unit.get('current_city'))
+        if start is None or end is None:
+            return False, f"The city in day {i+1} cannot be parsed."
+        city_set.update((start, end))
+    city_set.discard(normalize_city(question['org']))
     if len(city_set) != question['visiting_city_number']:
         return False, f"The number of visiting cities should be {question['visiting_city_number']}."
-    
     return True, None
 
 def is_valid_days(question, tested_data):
     lens = 0
     for i in range(min(question['days'],len(tested_data))):
-        if tested_data[i] != {} and tested_data[i]['current_city'] != "You don't need to fill in the information for this or later days.":
+        if tested_data[i] != {} and tested_data[i].get('current_city') not in (None, '') and tested_data[i]['current_city'] != "You don't need to fill in the information for this or later days.":
             lens += 1
         
     if lens != question['days']:
@@ -494,16 +359,18 @@ def is_not_absent(question, tested_data):
         if 'accommodation' not in unit:
             return False, f"No Accommodation Info."
         
-        if ('from ' in unit['current_city'] or 'to ' in unit['current_city']) and unit['transportation'] in ['','-']:
+        start, end = city_route(unit['current_city'])
+        traveling = start != end
+        if traveling and unit['transportation'] in ['', '-']:
             return False, f"No transportation in day {i+1} is not allowed."
         
-        if ('from ' not in unit['current_city'] and  ' to ' not in unit['current_city']) and unit['attraction'] in ['','-']:
+        if not traveling and not parse_attractions(unit['attraction']):
             return False, f"No attaction in day {i+1} is not allowed."
 
         if i != question['days'] - 1 and unit['accommodation'] in ['','-']:
             return False, f"No accommodation in day {i+1} is not allowed."
 
-        if (unit['breakfast'] in ['','-'] or unit['lunch'] in ['','-'] or unit['dinner'] in ['','-']) and 'from ' not in unit['current_city']:
+        if (unit['breakfast'] in ['','-'] or unit['lunch'] in ['','-'] or unit['dinner'] in ['','-']) and not traveling:
             return False, f"No meal in day {i+1} is not allowed."
         
 
