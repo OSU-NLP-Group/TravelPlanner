@@ -219,3 +219,14 @@ def test_valid_plan_passes_both_public_entry_points(db, question, uppercase):
 ])
 def test_multi_city_route_rejects_early_return_wrong_state_and_unknown_city(db, question, cities):
     assert db[0].is_reasonable_visiting_city(dict(question, days=5, dest='State'), [day(current_city=c) for c in cities])[0] is False
+
+
+def test_attraction_existence_allows_multiple_database_locations(db, question):
+    # The official database can list more than one address for the same named
+    # attraction in a city. Existence does not require a unique pricing record.
+    db[0].attractions.data = pd.DataFrame([
+        {'Name': 'Museum', 'City': 'Away', 'Address': '1 First Street'},
+        {'Name': 'Museum', 'City': 'Away', 'Address': '2 Second Street'},
+    ])
+    plan = [day(attraction='Museum, Away')]
+    assert db[0].is_valid_information_in_sandbox(question, plan) == (True, None)

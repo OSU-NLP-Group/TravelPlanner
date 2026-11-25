@@ -22,5 +22,6 @@ exercises both public evaluation entry points.
 
 Unresolvable costs return infinity so the existing budget comparison fails instead
 of treating the item as free. Identical duplicate database rows are deduplicated;
-conflicting matches fail lookup rather than depending on row order. Existing
+conflicting priced-service matches fail lookup rather than depending on row order.
+Attraction existence accepts multiple matching locations in the database. Existing
 missing-information checks remain responsible for omitted plan components.

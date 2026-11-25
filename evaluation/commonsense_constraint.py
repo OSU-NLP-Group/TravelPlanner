@@ -262,7 +262,7 @@ def is_valid_information_in_sandbox(question, tested_data):
         if 'attraction' in unit and unit['attraction'] and unit['attraction'] != '-':
             attractions_list = parse_attractions(unit['attraction'])
             for attraction in attractions_list:
-                if len(matching_records(attractions.data, attraction, 'Name', 'City')) != 1:
+                if len(matching_records(attractions.data, attraction, 'Name', 'City')) < 1:
                     return False, f"The attraction {attraction} in day {i+1} is invalid in the sandbox."
         # elif 'attraction' not in unit:
         #     return False, f"No Attraction Info."
